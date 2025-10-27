@@ -14,9 +14,10 @@
   box-shadow: none;
   z-index: 1034;
   backdrop-filter: blur(6px);
-  background-color: transparent;
+  background-color: var(--#{$prefix}primary-bg-subtle);
   border-bottom: 1px dashed var(--#{$prefix}gray-300);
   width: calc(100% - 60px);
+
   @media (max-width: 480px) {
     width: 100%;
   }
@@ -33,20 +34,24 @@ html.collapsed #miniSidebar {
   color: var(--#{$prefix}gray-600);
   border-right: 1px dashed var(--#{$prefix}gray-300);
   z-index: 2;
+
   .brand-logo {
     position: sticky;
     top: 0;
     background-color: var(--#{$prefix}body-bg);
     padding: 0.75rem 1rem;
     z-index: 2;
+
     // border-right: 1px dashed var(--#{$prefix}gray-300);
     @media (max-width: 768px) {
       padding: 0rem 1rem;
     }
   }
+
   .site-logo-text {
     display: none;
   }
+
   .upgrade-ui {
     display: none;
   }
@@ -85,11 +90,13 @@ html.collapsed #miniSidebar {
       color: var(--#{$prefix}gray-700);
       background-color: var(--#{$prefix}gray-100);
     }
+
     &.active {
       color: var(--#{$prefix}primary-text-emphasis);
       background-color: var(--#{$prefix}primary-bg-subtle);
     }
   }
+
   .dropdown-menu .nav-item .nav-link {
     padding: 6px 20px;
   }
@@ -97,8 +104,10 @@ html.collapsed #miniSidebar {
   .nav-link .text {
     display: none;
   }
+
   .dropdown-submenu {
     position: relative;
+
     .dropdown-item {
       padding: 0.125rem 1.75rem;
     }
@@ -117,7 +126,7 @@ html.collapsed #miniSidebar {
       transform: none !important;
     }
 
-    .dropdown:hover > .dropdown-menu {
+    .dropdown:hover>.dropdown-menu {
       display: block;
     }
 
@@ -125,7 +134,7 @@ html.collapsed #miniSidebar {
       display: none;
     }
 
-    .dropdown-submenu:hover > .dropdown-menu {
+    .dropdown-submenu:hover>.dropdown-menu {
       display: block;
     }
   }
@@ -147,12 +156,14 @@ html.expanded #miniSidebar {
   .site-logo-text {
     display: block;
   }
+
   .brand-logo {
     position: sticky;
     top: 0;
     background-color: var(--#{$prefix}navbar-bg);
     padding: 0.75rem 1rem;
     z-index: 2;
+
     // border-right: 1px dashed var(--#{$prefix}gray-300);
     @media (max-width: 768px) {
       padding: 0rem 1rem;
@@ -165,6 +176,7 @@ html.expanded #miniSidebar {
     padding-bottom: 30px;
     background-color: var(--#{$prefix}navbar-bg);
   }
+
   .nav-heading {
     color: var(--#{$prefix}gray-600);
     display: block;
@@ -174,15 +186,17 @@ html.expanded #miniSidebar {
     padding: 16px 20px;
     text-transform: uppercase;
   }
+
   .nav-line {
     display: none;
   }
+
   .nav-link {
     white-space: nowrap;
     overflow: hidden;
     padding: 10px 12px;
     color: var(--#{$prefix}gray-600);
-    font-weight: 500;
+    font-weight: 600;
     margin: 0.125rem 0.5rem;
     border-radius: 0.5rem;
     background-color: transparent;
@@ -200,6 +214,7 @@ html.expanded #miniSidebar {
       color: var(--#{$prefix}gray-700);
       background-color: var(--#{$prefix}gray-100);
     }
+
     &.active {
       color: var(--#{$prefix}primary-text-emphasis);
       background-color: var(--#{$prefix}primary-bg-subtle);
@@ -213,9 +228,11 @@ html.expanded #miniSidebar {
     transform: none !important;
     box-shadow: none;
     background-color: transparent;
+
     .nav-link {
       margin: 0.125rem 1.5rem;
     }
+
     .dropdown-submenu {
       .dropdown-item {
         display: flex;
@@ -223,6 +240,7 @@ html.expanded #miniSidebar {
         padding: 0.5rem 1.25rem;
         // margin: 0.125rem 0.5rem;
       }
+
       .dropdown-menu {
         .nav-link {
           white-space: nowrap;
@@ -267,6 +285,7 @@ html.collapsed #content {
   margin-left: 3.75rem;
   padding: 80px 40px;
   min-height: 100vh;
+
   @media (max-width: 990px) {
     padding: 80px 20px;
   }
@@ -279,6 +298,7 @@ html.collapsed #content {
 html.expanded #content {
   margin-left: 15.875rem;
   padding: 80px 40px;
+
   @media (max-width: 990px) {
     padding: 80px 20px;
   }
@@ -287,6 +307,7 @@ html.expanded #content {
 html.collapsed #content .collapse-mini {
   display: block;
 }
+
 html.collapsed #content .collapse-expanded {
   display: none;
 }
@@ -294,12 +315,15 @@ html.collapsed #content .collapse-expanded {
 html.expanded #content .navbar-glass {
   transition: width 0.3s;
   width: calc(100% - 250px);
+
   @media (max-width: 990px) {
     width: 100%;
   }
+
   .collapse-mini {
     display: none;
   }
+
   .collapse-expanded {
     display: block;
   }
@@ -364,6 +388,7 @@ html.expanded #content .navbar-glass {
     background-color: var(--#{$prefix}navbar-bg);
     padding: 0.75rem 1rem;
     z-index: 2;
+
     // border-right: 1px dashed var(--#{$prefix}gray-300);
     @media (max-width: 768px) {
       padding: 0rem 1rem;
@@ -376,6 +401,7 @@ html.expanded #content .navbar-glass {
     padding-bottom: 30px;
     background-color: var(--#{$prefix}navbar-bg);
   }
+
   .nav-heading {
     color: var(--#{$prefix}gray-600);
     display: block;
@@ -385,15 +411,17 @@ html.expanded #content .navbar-glass {
     padding: 16px 20px;
     text-transform: uppercase;
   }
+
   .nav-line {
     display: none;
   }
+
   .nav-link {
     white-space: nowrap;
     overflow: hidden;
     padding: 10px 12px;
     color: var(--#{$prefix}gray-600);
-    font-weight: 500;
+    font-weight: 600;
     margin: 0.125rem 0.5rem;
     border-radius: 0.5rem;
     background-color: transparent;
@@ -402,7 +430,7 @@ html.expanded #content .navbar-glass {
     .text {
       display: inline;
       margin-left: 0.25rem;
-      font-weight: 500;
+      font-weight: 600;
       vertical-align: middle;
     }
 
@@ -410,6 +438,7 @@ html.expanded #content .navbar-glass {
       color: var(--#{$prefix}gray-700);
       background-color: var(--#{$prefix}gray-100);
     }
+
     &.active {
       color: var(--#{$prefix}primary-text-emphasis);
       background-color: var(--#{$prefix}primary-bg-subtle);
@@ -423,9 +452,11 @@ html.expanded #content .navbar-glass {
     transform: none !important;
     box-shadow: none;
     background-color: transparent;
+
     .nav-link {
       margin: 0.125rem 1.5rem;
     }
+
     .dropdown-submenu {
       .dropdown-item {
         display: flex;
@@ -433,13 +464,14 @@ html.expanded #content .navbar-glass {
         padding: 0.5rem 1.25rem;
         // margin: 0.125rem 0.5rem;
       }
+
       .dropdown-menu {
         .nav-link {
           white-space: nowrap;
           overflow: hidden;
           padding: 0.5rem 1rem;
           color: var(--#{$prefix}gray-600);
-          font-weight: 500;
+          font-weight: 600;
           margin: 0 1.75rem;
         }
       }

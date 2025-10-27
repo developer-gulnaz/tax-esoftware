@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 import { Container } from 'react-bootstrap';
 
 export const metadata: Metadata = {
-  title: 'Sign In | Dasher',
+  title: 'Sign In',
   description: 'Login page',
 };
 

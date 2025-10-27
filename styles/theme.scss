@@ -1,3 +1,4 @@
+@use "user-variables";
 // Bootstrap functions
 @import "../node_modules/bootstrap/scss/functions";
 
@@ -5,7 +6,6 @@
 @import "../node_modules/@tabler/icons-webfont/dist/tabler-icons.min.css";
 
 // User Variables
-@import "user-variables";
 
 // theme variabless
 @import "theme/variables";

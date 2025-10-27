@@ -4,6 +4,7 @@ export type DashboardStatType = {
   icon: React.ReactNode;
   bgColor: string;
   textColor: string;
+  link: string;
 };
 
 export interface ProjectType {

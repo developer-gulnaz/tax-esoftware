@@ -1,9 +1,10 @@
 //import node modules libraries
 import {
-  IconBriefcase,
-  IconListCheck,
-  IconSnowboarding,
-  IconUsers,
+  IconArrowBarUp,
+  IconBuildingBank,
+  IconBuildingWarehouse,
+  IconCashBanknote,
+  IconListDetails,
 } from "@tabler/icons-react";
 import { v4 as uuid } from "uuid";
 
@@ -20,169 +21,52 @@ export const DashboardStatsData: DashboardStatType[] = [
   {
     id: uuid(),
     title: "मूल्यांकन पत्रक (नमुना 8)",
-    icon: <IconBriefcase size={24} strokeWidth={1.5} />,
+    icon: <IconListDetails size={35} strokeWidth={1.5} />, // Assessment Document
     bgColor: "bg-gradient-success",
     textColor: "text-success-emphasis",
+    link: "/valuationRegister",
   },
   {
     id: uuid(),
     title: "कर संग्रह (नमुना-10)",
-    icon: <IconListCheck size={24} strokeWidth={1.5} />,
-    bgColor: " bg-gradient-info",
-    textColor: "text-info-emphasis",
+    icon: <IconCashBanknote size={35} strokeWidth={1.5} />, // Tax Collection
+    bgColor: "bg-gradient-info",
+    textColor: "text-danger-emphasis",
+    link: "/taxAssessment/"
   },
   {
     id: uuid(),
     title: "डिपॉझिट / उत्पन्न",
-    icon: <IconUsers size={24} strokeWidth={1.5} />,
+    icon: <IconBuildingBank size={35} strokeWidth={1.5} />, // Deposit / Income
     bgColor: "bg-gradient-success",
-    textColor: "text-danger-emphasis",
+    textColor: "text-info-emphasis",
+    link: "/paymentRecipt"
   },
   {
     id: uuid(),
     title: "जावक (नमुना -15)",
-    icon: <IconSnowboarding size={24} strokeWidth={1.5} />,
+    icon: <IconArrowBarUp size={35} strokeWidth={1.5} />, // Outgoing/Expense
     bgColor: "bg-gradient-warning",
     textColor: "text-warning-emphasis",
+    link: "/paymentPaid"
   },
   {
     id: uuid(),
-    title: "मालमत्तेची यादी (मालमता एन्ट्री फोर्म )",
-    icon: <IconSnowboarding size={24} strokeWidth={1.5} />,
+    title: "मालमत्तेची यादी (मालमता एन्ट्री फोर्म)",
+    icon: <IconBuildingWarehouse size={35} strokeWidth={1.5} />, // Property list/Entry
     bgColor: "bg-gradient-warning",
     textColor: "text-warning-emphasis",
+    link: "/milkitDetails"
   },
 ];
 
 
 export const teamMembers: TeamsProps[] = [
   {
-    name: "John Doe",
-    role: "Project Manager",
-    avatar: "/images/avatar/avatar-15.jpg",
-    tasksAssigned: 2,
-  },
-  {
-    name: "Jane Smith",
+    name: "Gulnaz Sheikh",
     role: "Developer",
-    avatar: "/images/avatar/avatar-154.jpg",
+    avatar: "",
     tasksAssigned: 2,
   },
-  {
-    name: "Emily Johnson",
-    role: "Designer",
-    avatar: "/images/avatar/avatar-9.jpg",
-    tasksAssigned: 3,
-  },
-  {
-    name: "username",
-    role: "Designer",
-    avatar: "/images/avatar/avatar-6.jpg",
-    tasksAssigned: 8,
-  },
-  {
-    name: "Anita Parmar",
-    role: "Front End Developer",
-    avatar: "/images/avatar/avatar-5.jpg",
-    tasksAssigned: 7,
-  },
-  {
-    name: "Manasvi Suthar",
-    role: "UI Developer",
-    avatar: "/images/avatar/avatar-151.jpg",
-    tasksAssigned: 3,
-  },
 ];
 
-export const activityLog: ActivityLogType[] = [
-  {
-    description: "Design phase completed by Alice.",
-    timestamp: "Jan 20, 2025 10:30 AM",
-    colorClass: "primary",
-  },
-  {
-    description: "Initial client presentation delivered by Bob.",
-    timestamp: "Jan 19, 2025: 3:45 PM",
-    colorClass: "warning",
-  },
-  {
-    description: "Resource allocation updated by Charlie.",
-    timestamp: "Jan 18, 2025: 3:45 PM",
-    colorClass: "primary",
-  },
-  {
-    description: "Risk assessment review completed by Dana.",
-    timestamp: "Jan 17, 2025: 3:45 PM",
-    colorClass: "danger",
-  },
-  {
-    description: "New milestone added by Eve.",
-    timestamp: "Jan 16, 2025: 3:45 PM",
-    colorClass: "primary",
-  },
-  {
-    description: "New milestone added by Eve.",
-    timestamp: "Jan 15, 2025: 3:45 PM",
-    colorClass: "warning",
-  },
-];
-
-export const tasks: Task[] = [
-  {
-    id: "taskCheck1",
-    title: "Design project logo",
-    priority: "High",
-    badgeVariant: "info",
-  },
-  {
-    id: "taskCheck2",
-    title: "Create project plan",
-    priority: "Medium",
-    badgeVariant: "warning",
-  },
-  {
-    id: "taskCheck3",
-    title: "Update team assignments",
-    priority: "Low",
-    badgeVariant: "primary",
-  },
-  {
-    id: "taskCheck4",
-    title: "Prepare project budget",
-    priority: "Critical",
-    badgeVariant: "danger",
-  },
-  {
-    id: "taskCheck5",
-    title: "Dasher UI Figma Design",
-    priority: "Low",
-    badgeVariant: "primary",
-  },
-  {
-    id: "taskCheck6",
-    title: "Dasher UI Bootstrap Development",
-    priority: "Low",
-    badgeVariant: "primary",
-  },
-];
-
-export const EventList: EventType[] = [
-  {
-    title: "Project Kickoff",
-    date: "Jan 25, 2025",
-    time: "10:00 AM",
-    platform: "Zoom",
-  },
-  {
-    title: "Project Kickoff",
-    date: "Jan 25, 2025",
-    time: "10:00 AM",
-    platform: "Zoom",
-  },
-  {
-    title: "Project Kickoff",
-    date: "Jan 25, 2025",
-    time: "10:00 AM",
-    platform: "Zoom",
-  },
-];

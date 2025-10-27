@@ -26,7 +26,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ hideLogo = false, containerId }) => {
   const location = usePathname();
   const admin = useAdmin();
-  
+
   //Generate Link
   const generateLink = (item: MenuItemType) => {
     return (
@@ -52,11 +52,12 @@ const Sidebar: React.FC<SidebarProps> = ({ hideLogo = false, containerId }) => {
       <div>
         {hideLogo || (
           <div className="brand-logo">
+
             <Link
               href="/"
               className="d-none d-md-flex align-items-center gap-2"
             >
-              <span className="fw-bold fs-4 site-logo-text">{admin?.gramPanchayat || "Gram Panchayat"}</span>
+              <span className="fw-bold fs-4 site-logo-text">{admin?.gramPanchayat + " ग्रामपंचायत" || "Gram Panchayat"}</span>
             </Link>
           </div>
         )}
