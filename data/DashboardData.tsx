@@ -10,10 +10,7 @@ import { v4 as uuid } from "uuid";
 
 //import custom types
 import {
-  ActivityLogType,
   DashboardStatType,
-  EventType,
-  Task,
   TeamsProps
 } from "types/DashboardTypes";
 
@@ -56,7 +53,7 @@ export const DashboardStatsData: DashboardStatType[] = [
     icon: <IconBuildingWarehouse size={35} strokeWidth={1.5} />, // Property list/Entry
     bgColor: "bg-gradient-warning",
     textColor: "text-warning-emphasis",
-    link: "/milkitDetails"
+    link: "/propertyDetails"
   },
 ];
 

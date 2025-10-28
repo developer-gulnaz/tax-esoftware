@@ -27,8 +27,8 @@ export const DashboardMenu: MenuItemType[] = [
     title: "मालमत्ता",
     icon: <IconBuildingEstate size={20} strokeWidth={1.5} />,
     children: [
-      { id: uuid(), name: "मालमत्ता माहिती", link: "ecommerce" },
-      { id: uuid(), name: "मालमत्तेची (एन्ट्री फॉर्म)", link: "add_property" },
+      { id: uuid(), name: "मालमत्ता माहिती", link: "propertyDetails" },
+      { id: uuid(), name: "मालमत्तेची (एन्ट्री फॉर्म)", link: "propertyDetails/addProperty" },
       // { id: uuid(), name: "अतिरिक्त मालमत्ता माहिती", link: "milkat_info" },
     ]
   },

@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  output: "export",
+  // output: "export",
   env: {
     NEXT_PUBLIC_BASE_PATH: isProd ? "/" : "",
   },

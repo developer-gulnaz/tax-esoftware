@@ -674,7 +674,7 @@ $table-cell-vertical-align: top !default;
 $table-color: var(--#{$prefix}body-color) !default;
 $table-bg: transparent !default;
 $table-accent-bg: transparent !default;
-$table-th-font-weight: 500 !default;
+$table-th-font-weight: 600 !default;
 $table-striped-color: $table-color !default;
 $table-striped-bg-factor: 1;
 $table-striped-bg: var(--#{$prefix}gray-100
@@ -791,7 +791,7 @@ $form-text-color: $gray-400 !default;
 $form-label-margin-bottom: 0.5rem !default;
 $form-label-font-size: null !default;
 $form-label-font-style: null !default;
-$form-label-font-weight: $font-weight-medium !default;
+$form-label-font-weight: $font-weight-semibold !default;
 $form-label-color: var(--#{$prefix}gray-800) !default;
 // scss-docs-end form-label-variables
 
@@ -1510,3 +1510,17 @@ $social-buttons: (
   'youtube': #ff0000,
   'zoom': #2d8cff,
   ) !default;
+
+.compact-table td,
+.compact-table th {
+  padding: 4px 6px !important;
+  /* minimal padding */
+  vertical-align: middle;
+}
+
+.compact-table select,
+.compact-table input {
+  height: 30px;
+  font-size: 13px;
+  padding: 2px 6px;
+}
