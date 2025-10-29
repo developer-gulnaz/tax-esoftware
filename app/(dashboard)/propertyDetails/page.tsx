@@ -8,13 +8,14 @@ import { Button, Col, FormCheck, Row, Spinner, Table } from "react-bootstrap";
 
 interface PropertyData {
   _id: string;
-  serialNo: number;
-  propertyCode: string;
-  propertyNumber: string;
-  address: string;
-  ownerName: string;
-  occupantName: string;
-  description: string;
+  serialNo?: number;
+  propertyCode?: string;
+  propertyNumber?: string;
+  address?: string;
+  ownerName?: string;
+  occupantName?: string;
+  description?: string;
+  isSelected?: boolean;
   seeMore?: string;
   management?: string;
 }
@@ -24,39 +25,62 @@ export default function PropertyDetailsPage() {
   const [data, setData] = useState<PropertyData[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Redirect if not logged in
+  // Pagination state (1-based)
+  const [page, setPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10); // default must be 10
+  const [total, setTotal] = useState<number>(0);
+
+  // Protect route
   useEffect(() => {
     const admin = sessionStorage.getItem("admin");
     if (!admin) router.push("/sign-in");
   }, [router]);
 
-  // Update document title
   useEffect(() => {
     document.title = "मालमत्ता यादी";
   }, []);
 
-  // Fetch properties data
+  // Fetch data whenever page or limit changes
   useEffect(() => {
+    let aborted = false;
     async function fetchData() {
+      setLoading(true);
       try {
-        const res = await fetch("/api/property");
-        if (!res.ok) throw new Error("Failed to fetch property data");
-        const result = await res.json();
+        const res = await fetch(`/api/property?page=${page}&limit=${pageSize}`, {
+          cache: "no-store",
+        });
 
-        // Adjust according to API shape
-        const properties = Array.isArray(result) ? result : result.data;
-        setData(properties);
+        if (!res.ok) {
+          const txt = await res.text();
+          throw new Error(`API error ${res.status}: ${txt}`);
+        }
 
-        console.log("Fetched properties:", properties);
-      } catch (error) {
-        console.error("Error fetching properties:", error);
+        const json = await res.json();
+        const items = json?.data ?? json?.items ?? (Array.isArray(json) ? json : null);
+        const t = json?.total ?? json?.count ?? (Array.isArray(json) ? json.length : 0);
+
+        if (!items) {
+          console.warn("Unexpected API shape:", json);
+          setData([]);
+          setTotal(0);
+        } else {
+          setData(items);
+          setTotal(t);
+        }
+      } catch (err) {
+        console.error("Error fetching property list:", err);
+        setData([]);
+        setTotal(0);
       } finally {
-        setLoading(false);
+        if (!aborted) setLoading(false);
       }
     }
 
     fetchData();
-  }, []);
+    return () => {
+      aborted = true;
+    };
+  }, [page, pageSize]);
 
   return (
     <div className="custom-container">
@@ -64,8 +88,8 @@ export default function PropertyDetailsPage() {
         <IconBuildingWarehouse size={30} strokeWidth={1.5} />
         <h3 className="fw-bold px-2 mt-1">मालमत्ता यादी</h3>
       </div>
-      <div className="mb-5">
 
+      <div className="mb-5">
         <Button className="border-0">सर्व</Button>
         <Button className="bg-danger border-0 mx-2">निवडलेले</Button>
 
@@ -76,6 +100,7 @@ export default function PropertyDetailsPage() {
           Add Property
         </Button>
       </div>
+
       <Row>
         <Col md={12}>
           <div className="p-4 bg-light shadow-sm rounded-3">
@@ -87,19 +112,14 @@ export default function PropertyDetailsPage() {
             ) : (
               <>
                 <Table hover responsive className="borderless align-middle mb-0">
-                  <thead className="bg-light fw-semibold">
+                  <thead className="bg-light fw-semibold border-btm">
                     <tr>
                       <th>
                         <FormCheck
                           checked={data.length > 0 && data.every((item) => item.isSelected)}
                           onChange={(e) => {
                             const checked = e.target.checked;
-                            setData((prev) =>
-                              prev.map((item) => ({
-                                ...item,
-                                isSelected: checked,
-                              }))
-                            );
+                            setData((prev) => prev.map((item) => ({ ...item, isSelected: checked })));
                           }}
                         />
                       </th>
@@ -114,24 +134,21 @@ export default function PropertyDetailsPage() {
                       <th>व्यवस्थापन</th>
                     </tr>
                   </thead>
+
                   <tbody>
                     {data.length > 0 ? (
-                      data.map((item, index) => (
-                        <tr key={item._id}>
+                      data.map((item, idx) => (
+                        <tr key={item._id ?? `${(page - 1) * pageSize + idx}`}>
                           <td>
                             <FormCheck
                               checked={!!item.isSelected}
                               onChange={(e) => {
                                 const checked = e.target.checked;
-                                setData((prev) =>
-                                  prev.map((row) =>
-                                    row._id === item._id ? { ...row, isSelected: checked } : row
-                                  )
-                                );
+                                setData((prev) => prev.map((row) => (row._id === item._id ? { ...row, isSelected: checked } : row)));
                               }}
                             />
                           </td>
-                          <td>{index + 1}</td>
+                          <td>{(page - 1) * pageSize + idx + 1}</td>
                           <td>{item.propertyCode}</td>
                           <td>{item.propertyNumber}</td>
                           <td>{item.address}</td>
@@ -150,16 +167,25 @@ export default function PropertyDetailsPage() {
                     ) : (
                       <tr>
                         <td colSpan={10} className="text-center py-4 text-muted">
-                          No property records found
+                          कोणतेही रेकॉर्ड आढळले नाहीत
                         </td>
                       </tr>
                     )}
                   </tbody>
                 </Table>
 
-
                 <div className="mt-3">
-                  <TablePagination table={{}} hasIcon />
+                  <TablePagination
+                    currentPage={page}
+                    pageSize={pageSize}
+                    totalRows={total}
+                    onPageChange={(p) => setPage(p)}
+                    onPageSizeChange={(size) => {
+                      setPageSize(size);
+                      setPage(1);
+                    }}
+                    hasIcon
+                  />
                 </div>
               </>
             )}

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Row, Col } from "react-bootstrap";
 
-export default function TaxAssessmentPage() {
+export default function TaxAssessmentListPage() {
   const router = useRouter();
 
   useEffect(() => {
@@ -12,18 +12,18 @@ export default function TaxAssessmentPage() {
   }, [router]);
 
   useEffect(() => {
-    document.title = "Tax Assessment";
+    document.title = " वसूली यादी";
   }, []);
 
   return (
     <div className="custom-container">
-      <h3 className="fw-bold mb-4">कर संग्रह (नमुना-10)</h3>
+      <h3 className="fw-bold mb-4"> वसूली यादी</h3>
 
       <Row className="g-4">
         <Col md={12}>
           <div className="p-4 bg-light shadow-sm rounded-3">
             <p className="text-muted">
-              येथे कर संग्रह (नमुना-10) माहिती येईल...
+              येथे  वसूली यादी माहिती येईल...
             </p>
           </div>
         </Col>

@@ -49,7 +49,7 @@ export const DashboardStatsData: DashboardStatType[] = [
   },
   {
     id: uuid(),
-    title: "मालमत्तेची यादी (मालमता एन्ट्री फोर्म)",
+    title: "मालमत्तेची यादी",
     icon: <IconBuildingWarehouse size={35} strokeWidth={1.5} />, // Property list/Entry
     bgColor: "bg-gradient-warning",
     textColor: "text-warning-emphasis",

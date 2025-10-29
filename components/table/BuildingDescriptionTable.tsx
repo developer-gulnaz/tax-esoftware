@@ -1,5 +1,6 @@
 "use client";
 import { Plus, Trash } from "lucide-react";
+import { IconPlus, IconTrash } from "node_modules/@tabler/icons-react/dist/esm/icons";
 import { useState } from "react";
 import { Button, Form, Table } from "react-bootstrap";
 
@@ -202,7 +203,7 @@ export default function BuildingDescriptionTable() {
                   size="sm"
                   onClick={() => removeRow(index)}
                 >
-                  <Trash size={16} />
+                  <IconTrash size={16} />
                 </Button>
               </td>
             </tr>
@@ -212,7 +213,7 @@ export default function BuildingDescriptionTable() {
 
       <div className="text-end">
         <Button variant="success" size="sm" onClick={addRow}>
-          <Plus size={16} />
+          <IconPlus size={16} />
         </Button>
       </div>
     </div>

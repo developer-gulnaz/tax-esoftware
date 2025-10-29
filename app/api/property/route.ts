@@ -1,23 +1,23 @@
-export const dynamic = "force-dynamic"; // 👈 Add this line
+export const dynamic = "force-dynamic"; // 👈 Keep this
 
 import { MongoClient } from "mongodb";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-const uri = process.env.MONGO_URI; // ensure it's in .env.local
+const uri = process.env.MONGO_URI as string; // ensure it's in .env.local
 const client = new MongoClient(uri);
 
-export async function GET(request) {
+export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get("page")) || 1;
-    const limit = parseInt(searchParams.get("limit")) || 10;
+    const page: number = parseInt(searchParams.get("page") || "1", 10);
+    const limit: number = parseInt(searchParams.get("limit") || "10", 10);
     const skip = (page - 1) * limit;
 
     await client.connect();
-    const db = client.db("gram-panchayat"); // replace with your DB name
+    const db = client.db("grampanchayat");
     const collection = db.collection("properties");
 
-    const total = await collection.countDocuments();
+    const total: number = await collection.countDocuments();
     const data = await collection.find().skip(skip).limit(limit).toArray();
 
     return NextResponse.json({

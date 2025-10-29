@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 
-export default function MilkitDetailsPage() {
+export default function AddPropertyPage() {
   const router = useRouter();
 
   useEffect(() => {

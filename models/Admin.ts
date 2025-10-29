@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { models } from "mongoose";
 import bcrypt from "bcryptjs";
 
 export interface IAdmin extends mongoose.Document {

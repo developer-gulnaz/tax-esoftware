@@ -1,29 +1,19 @@
-import { MongoClient } from "mongodb";
+import mongoose from "mongoose";
 
-const uri = process.env.MONGO_URI;
-if (!uri) throw new Error("Please add MONGODB_URI to your .env");
+const MONGODB_URI = process.env.MONGO_URI as string;
+if (!MONGODB_URI) throw new Error("❌ MONGO_URI is missing in .env");
 
-const options = {};
+let isConnected = false;
 
-let client: MongoClient;
-let clientPromise: Promise<MongoClient>;
+async function dbConnect() {
+  if (isConnected) return;
 
-// Extend globalThis to store client promise
-interface GlobalWithMongo {
-  _mongoClientPromise?: Promise<MongoClient>;
+  const db = await mongoose.connect(MONGODB_URI, {
+    dbName: "grampanchayat", // ✅ update if your DB name is different
+  });
+
+  isConnected = db.connections[0].readyState === 1;
+  console.log("✅ MongoDB Connected (Mongoose)");
 }
 
-const g = globalThis as unknown as GlobalWithMongo;
-
-if (process.env.NODE_ENV === "development") {
-  if (!g._mongoClientPromise) {
-    client = new MongoClient(uri, options);
-    g._mongoClientPromise = client.connect();
-  }
-  clientPromise = g._mongoClientPromise;
-} else {
-  client = new MongoClient(uri, options);
-  clientPromise = client.connect();
-}
-
-export default clientPromise;
+export default dbConnect;

@@ -2,7 +2,8 @@
 import BuildingDescriptionTable from "components/table/BuildingDescriptionTable";
 import FamilyMember from "components/table/FamilyMembers";
 import { Button, Col, Row, Table } from "node_modules/react-bootstrap/esm";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 
 export default function AddPropertyForm() {
     const [taxItems, setTaxItems] = useState([{ id: 1 }]);
@@ -24,20 +25,31 @@ export default function AddPropertyForm() {
         );
     };
 
-    // Tax checkboxes state
-    const taxOptions = [
-        "इमारत कर",
-        "विजकर",
-        "सा.पानीपट्टी",
-        "विशेष पानीपट्टी",
-        "सामान्य सफाई कर",
-        "आरोग्य रक्षण कर",
-        "धंदा कर",
-        "नोटीस फी",
-        "अधिपत्राची (वारंटी फी)",
-        "इतर",
-    ];
 
+    const [taxList, setTaxList] = useState([]);
+    useEffect(() => {
+        const fetchTaxes = async () => {
+            try {
+                const res = await fetch("/api/taxDetails");
+                const json = await res.json();
+
+                if (Array.isArray(json.data)) {
+                    setTaxList(json.data);
+                } else {
+                    setTaxList([]);
+                }
+
+            } catch (error) {
+                console.error("Error fetching tax details:", error);
+                setTaxList([]);
+            }
+        };
+
+        fetchTaxes();
+    }, []);
+
+
+    // for tax list selection
     const [selectedTaxes, setSelectedTaxes] = useState([]);
     const [selectAllTaxes, setSelectAllTaxes] = useState(false);
 
@@ -45,20 +57,19 @@ export default function AddPropertyForm() {
         if (selectAllTaxes) {
             setSelectedTaxes([]);
         } else {
-            setSelectedTaxes([...taxOptions]);
+            setSelectedTaxes(taxList.map(t => t._id));
         }
         setSelectAllTaxes(!selectAllTaxes);
     };
 
-    const handleTaxChange = (tax) => {
-        if (selectedTaxes.includes(tax)) {
-            setSelectedTaxes(selectedTaxes.filter((t) => t !== tax));
-        } else {
-            setSelectedTaxes([...selectedTaxes, tax]);
-        }
+    const handleTaxChange = (id) => {
+        setSelectedTaxes(prev =>
+            prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]
+        );
     };
 
-    // For "आकारणी जोडण्यासाठी?"
+
+    // for Akarani selection
     const [selectedAkarani, setSelectedAkarani] = useState([]);
     const [selectAllAkarani, setSelectAllAkarani] = useState(false);
 
@@ -66,18 +77,17 @@ export default function AddPropertyForm() {
         if (selectAllAkarani) {
             setSelectedAkarani([]);
         } else {
-            setSelectedAkarani([...taxOptions]);
+            setSelectedAkarani(taxList.map(t => t._id));
         }
         setSelectAllAkarani(!selectAllAkarani);
     };
 
-    const handleAkaraniChange = (tax) => {
-        if (selectedAkarani.includes(tax)) {
-            setSelectedAkarani(selectedAkarani.filter((t) => t !== tax));
-        } else {
-            setSelectedAkarani([...selectedAkarani, tax]);
-        }
+    const handleAkaraniChange = (id) => {
+        setSelectedAkarani(prev =>
+            prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]
+        );
     };
+
 
     return (
         <form className="container-fluid py-4">
@@ -134,20 +144,21 @@ export default function AddPropertyForm() {
                         </label>
                     </div>
                     <div className="gap-3">
-                        {taxOptions.map((tax, index) => (
-                            <div key={index} className="form-check">
+                        {taxList.map((tax, index) => (
+                            <div key={tax._id} className="form-check">
                                 <input
                                     type="checkbox"
                                     className="form-check-input"
                                     id={`tax${index}`}
-                                    checked={selectedTaxes.includes(tax)}
-                                    onChange={() => handleTaxChange(tax)}
+                                    checked={selectedTaxes.includes(tax._id)}
+                                    onChange={() => handleTaxChange(tax._id)}
                                 />
                                 <label htmlFor={`tax${index}`} className="form-check-label">
-                                    {tax}
+                                    {tax.taxName}
                                 </label>
                             </div>
                         ))}
+
                     </div>
                 </Col>
             </Row>
@@ -221,20 +232,21 @@ export default function AddPropertyForm() {
                         </label>
                     </div>
                     <div className="gap-3">
-                        {taxOptions.map((tax, index) => (
-                            <div key={index} className="form-check">
+                        {taxList.map((tax, index) => (
+                            <div key={tax._id} className="form-check">
                                 <input
                                     type="checkbox"
                                     className="form-check-input"
                                     id={`akarani${index}`}
-                                    checked={selectedAkarani.includes(tax)}
-                                    onChange={() => handleAkaraniChange(tax)}
+                                    checked={selectedAkarani.includes(tax._id)}
+                                    onChange={() => handleAkaraniChange(tax._id)}
                                 />
                                 <label htmlFor={`akarani${index}`} className="form-check-label">
-                                    {tax}
+                                    {tax.taxName}
                                 </label>
                             </div>
                         ))}
+
                     </div>
                 </Col>
             </Row>

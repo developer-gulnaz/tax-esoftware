@@ -1,5 +1,5 @@
 //import node modules libraries
-import { IconBuildingEstate, IconDatabaseCog, IconLayoutDashboard, IconLogin2, IconReceiptRupee, IconReport } from "@tabler/icons-react";
+import { IconBuildingEstate, IconDatabaseCog, IconFileAnalytics, IconHomeCog, IconLayoutDashboard, IconLogin2, IconReceiptRupee, IconReport, IconSettingsCog, } from "@tabler/icons-react";
 import { v4 as uuid } from "uuid";
 
 //import custom type
@@ -17,9 +17,10 @@ export const DashboardMenu: MenuItemType[] = [
     title: "मास्टर",
     icon: <IconDatabaseCog size={20} strokeWidth={1.5} />,
     children: [
-      { id: uuid(), name: "फॅमिली मास्टर", link: "family_tree" },
-      { id: uuid(), name: "इमारत_कर", link: "building-tax" },
-      { id: uuid(), name: "इमारत_प्रकार", link: "building-type" }
+      { id: uuid(), name: "फॅमिली मास्टर", link: "familyTree" },
+      { id: uuid(), name: "इमारत कर", link: "buildingTax" },
+      { id: uuid(), name: "इमारत प्रकार", link: "buildingType" },
+      { id: uuid(), name: "योजना", link: "govtScheme" },
     ],
   },
   {
@@ -38,8 +39,8 @@ export const DashboardMenu: MenuItemType[] = [
     title: "कर माहिती",
     icon: <IconReceiptRupee size={20} strokeWidth={1.5} />,
     children: [
-      { id: uuid(), name: "कर तपशील", link: "tax-detail" },
-      { id: uuid(), name: "कराच्या थकबाकीचा तपशील", link: "tax_due/add_new" },
+      { id: uuid(), name: "कर तपशील", link: "taxDetails" },
+      { id: uuid(), name: "कराच्या थकबाकीचा तपशील", link: "taxDue/add" },
     ],
   },
 
@@ -48,8 +49,32 @@ export const DashboardMenu: MenuItemType[] = [
     title: "अहवाल",
     icon: <IconReport size={20} strokeWidth={1.5} />,
     children: [
-      { id: uuid(), name: "डिमांड बिल (नमुना-9 क)", link: "tax_due_bill" },
-      { id: uuid(), name: "कर संग्रह सारांश (नमुना-10)", link: "tax_summury" },
+      { id: uuid(), name: "मूल्यांकन पत्रक (नमुना 8)", link: "valuationRegister" },
+      { id: uuid(), name: "डिमांड बिल (नमुना-9 क)", link: "taxDueBill" },
+      { id: uuid(), name: "कर संग्रह (नमुना-10)", link: "taxAssessment/add" },
+      { id: uuid(), name: "वसूली यादी (नमुना-10 प्रिंट)", link: "taxAssessmentList" },
+    ],
+  },
+
+  {
+    id: uuid(),
+    title: "खाते",
+    icon: <IconFileAnalytics size={20} strokeWidth={1.5} />,
+    children: [
+      { id: uuid(), name: " जावक (नमुना -15)", link: "paymentPaid" },
+      { id: uuid(), name: "डिपॉझिट / उत्पन्न", link: "paymentRecipt" },
+      { id: uuid(), name: "वसूली सारांश", link: "taxSummary" },
+    ],
+  },
+
+  {
+    id: uuid(),
+    title: "व्यवस्थापन",
+    icon: <IconHomeCog size={20} strokeWidth={1.5} />,
+    children: [
+      { id: uuid(), name: "प्रोफाइल अद्यतन", link: "updateProfile" },
+      { id: uuid(), name: "संकेतशब्द बदला", link: "changePassword" },
+      { id: uuid(), name: "वापरकर्ते व्यवस्थापित करा ", link: "manageUsers" },
     ],
   },
 
