@@ -141,12 +141,12 @@ export default function TaxDetailsPage() {
 
             <Form onSubmit={handleSubmit}>
               <Row className="g-3">
-                <Col md={2}>
+                <Col md={12}>
                   <Form.Label>कर कोड</Form.Label>
                   <Form.Control value={form.code} readOnly />
                 </Col>
 
-                <Col md={10}>
+                <Col md={12}>
                   <Form.Label>कराचे नाव *</Form.Label>
                   <Form.Control
                     required
@@ -157,7 +157,7 @@ export default function TaxDetailsPage() {
                   />
                 </Col>
 
-                <Col md={6}>
+                <Col md={12}>
                   <Form.Label>कर रक्कम *</Form.Label>
                   <Form.Control
                     type="number"
@@ -185,7 +185,7 @@ export default function TaxDetailsPage() {
 
                 </Col>
 
-                <Col md={6}>
+                <Col md={12}>
                   <Form.Label>रक्कम प्रकार *</Form.Label>
                   <Form.Select
                     value={form.amountType}
@@ -262,7 +262,7 @@ export default function TaxDetailsPage() {
                     onChange={() => setForm({ ...form, showInSummaryList: false })}
                   />
                 </Col>
-                <Col md={6}>
+                <Col md={12}>
                   <Form.Label>प्रकार</Form.Label>
                   <Form.Select
                     value={form.type}
