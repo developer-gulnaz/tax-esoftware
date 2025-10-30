@@ -5,7 +5,7 @@ declare module "express-session" {
     user?: {
       id: string;
       username: string;
-      gramPanchayat: string;
+      gpName: string;
     };
   }
 }

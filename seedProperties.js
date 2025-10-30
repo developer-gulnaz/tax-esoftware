@@ -2,7 +2,8 @@
 import mongoose from "mongoose";
 
 // MongoDB connection
-const MONGO_URI = "mongodb+srv://dronemart:keRn8WWZL1LcjDyw@cluster0.cirv6wv.mongodb.net/grampanchayat?retryWrites=true&w=majority&appName=Cluster0";
+const MONGO_URI = "mongodb://localhost:27017/grampanchayat"
+// "mongodb+srv://dronemart:keRn8WWZL1LcjDyw@cluster0.cirv6wv.mongodb.net/grampanchayat?retryWrites=true&w=majority&appName=Cluster0";
 
 // Define Property schema
 const propertySchema = new mongoose.Schema({

@@ -1,7 +1,7 @@
 "use client";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Row, Col, Form, Button, Spinner } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
 
 export default function AddBuildingTaxPage() {
   const router = useRouter();
@@ -69,22 +69,13 @@ export default function AddBuildingTaxPage() {
                 <Col md={6}>
                   <Form.Group>
                     <Form.Label>इमारतीचा प्रकार</Form.Label>
-                    <Form.Select
+                    <Form.Control
+                      type="text"
                       name="buildingType"
                       value={formData.buildingType}
                       onChange={handleChange}
                       required
-                    >
-                      <option value="">-- निवडा --</option>
-                      <option value="rcc">आरसीसी पद्धतीची इमारत</option>
-                      <option value="brick">
-                        दगड, विटांची व चुना किंवा सिमेंट वापरून उभारलेली इमारत
-                      </option>
-                      <option value="mudbrick">
-                        दगड, किंवा विटा वापरलेली मातीची इमारत
-                      </option>
-                      <option value="hut">झोपडी किंवा मातीची इमारत</option>
-                    </Form.Select>
+                    />
                   </Form.Group>
                 </Col>
 

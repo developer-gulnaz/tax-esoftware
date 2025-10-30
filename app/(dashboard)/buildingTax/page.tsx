@@ -2,17 +2,16 @@
 
 import { IconBuildingWarehouse } from "@tabler/icons-react";
 import TablePagination from "components/table/TablePagination";
+import { formatDate } from "helper/formatDate";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { formatDate } from "helper/formatDate";
 import {
   Button,
   Col,
-  FormCheck,
   Modal,
   Row,
   Spinner,
-  Table,
+  Table
 } from "react-bootstrap";
 
 interface BuildingTaxData {
@@ -140,12 +139,7 @@ export default function BuildingTaxPage() {
                           </td> */}
                           <td>{(page - 1) * pageSize + idx + 1}</td>
                           <td>
-                            {{
-                              rcc: "आरसीसी पद्धतीची इमारत",
-                              brick: "दगड, विटांची व चुना किंवा सिमेंट वापरून उभारलेली इमारत",
-                              mudbrick: "दगड, किंवा विटा वापरलेली मातीची इमारत",
-                              hut: "झोपडी किंवा मातीची इमारत",
-                            }[item.buildingType] || "—"}
+                            {item.buildingType}
                           </td>
 
                           {/* <td>{item.buildingRate}</td>

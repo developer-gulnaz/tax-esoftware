@@ -1,5 +1,5 @@
 //import node modules libraries
-import { IconBuildingEstate, IconDatabaseCog, IconFileAnalytics, IconHomeCog, IconLayoutDashboard, IconLogin2, IconReceiptRupee, IconReport, IconSettingsCog, } from "@tabler/icons-react";
+import { IconBuildingEstate, IconDatabaseCog, IconFileAnalytics, IconHomeCog, IconLayoutDashboard, IconLogin2, IconReceiptRupee, IconReport } from "@tabler/icons-react";
 import { v4 as uuid } from "uuid";
 
 //import custom type

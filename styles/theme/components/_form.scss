@@ -72,11 +72,11 @@ input::-webkit-inner-spin-button {
   font-size: 32px;
   margin: 0 auto;
   text-align: center;
-  color: var(--#{$prefix}gray-800);
+  color: var(--#{$prefix}black);
 }
 
 ::placeholder {
-  color: var(--#{$prefix}gray-500);
+  color: var(--#{$prefix}black);
   opacity: 1; /* Firefox */
 }
 

@@ -25,7 +25,7 @@ const Header = () => {
 
   return (
     <Fragment>
-      <Navbar expand="lg" className="navbar-glass px-0 px-lg-4">
+      <Navbar expand="lg" className="navbar-glass py-0 px-lg-3">
         <Container fluid className="px-lg-0">
           <Flex alignItems="center" className="gap-4">
             {isTablet && (
@@ -39,7 +39,7 @@ const Header = () => {
             )}
             {isTablet || (
               <div>
-                <Link href={"#"} className="sidebar-toggle d-flex p-3">
+                <Link href={"#"} className="sidebar-toggle d-flex p-2">
                   <span
                     className="collapse-mini"
                     onClick={() => handleCollapsed("expanded")}

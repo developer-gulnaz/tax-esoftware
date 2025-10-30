@@ -1,7 +1,6 @@
 "use client";
-import { Plus, Trash } from "lucide-react";
 import { IconPlus, IconTrash } from "node_modules/@tabler/icons-react/dist/esm/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, Table } from "react-bootstrap";
 
 export default function BuildingDescriptionTable() {
@@ -52,6 +51,28 @@ export default function BuildingDescriptionTable() {
     setRows(updated);
   };
 
+  const [buildingTaxList, setBuildingTaxList] = useState([]);
+
+  useEffect(() => {
+    const fetchBuildingTax = async () => {
+      try {
+        const res = await fetch("/api/buildingTax");
+        const json = await res.json();
+        console.log("resp --- " + json);
+        if (Array.isArray(json.data)) {
+          setBuildingTaxList(json.data);
+        } else {
+          setBuildingTaxList([]);
+        }
+      } catch (error) {
+        console.error("Error fetching building tax details:", error);
+        setBuildingTaxList([]);
+      }
+    };
+
+    fetchBuildingTax();
+  }, []);
+
   return (
     <div className="mt-4">
       <h6 className="fw-bold mb-3">बांधकाचे वर्णन</h6>
@@ -85,14 +106,11 @@ export default function BuildingDescriptionTable() {
                   }
                 >
                   <option value="">-- निवडा --</option>
-                  <option value="rcc">आरसीसी पद्धतीची इमारत</option>
-                  <option value="brick">
-                    दगड, विटांची व चुना किंवा सिमेंट वापरून उभारलेली इमारत
-                  </option>
-                  <option value="mudbrick">
-                    दगड, किंवा विटा वापरलेली मातीची इमारत
-                  </option>
-                  <option value="hut">झोपडी किंवा मातीची इमारत</option>
+                  {buildingTaxList.map((tax, i) => (
+                    <option key={tax.id || i} value={tax.buildingType}>
+                      {tax.buildingType}
+                    </option>
+                  ))}
                 </Form.Select>
               </td>
 

@@ -23,7 +23,7 @@ const SignIn = () => {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [gramPanchayat, setGramPanchayat] = useState("");
+  const [gpCode, setGPCode] = useState("");
 
   const [financialYear, setFinancialYear] = useState("");
 
@@ -45,7 +45,7 @@ const SignIn = () => {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, gramPanchayat, financialYear }),
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await res.json();
@@ -120,8 +120,8 @@ const SignIn = () => {
                   <FormControl
                     type="text"
                     id="gramPanchayatInput"
-                    value={gramPanchayat}
-                    onChange={(e) => setGramPanchayat(e.target.value)}
+                    value={gpCode}
+                    onChange={(e) => setGPCode(e.target.value)}
                     required
                   />
                   <Feedback type="invalid">Please enter gram panchayat.</Feedback>

@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function useAdmin() {
-  const [admin, setAdmin] = useState<{ username: string; gramPanchayat: string } | null>(null);
+  const [admin, setAdmin] = useState<any>(null);
 
   useEffect(() => {
     const storedAdmin = sessionStorage.getItem("admin");

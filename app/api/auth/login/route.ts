@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   try {
     await dbConnect(); // ✅ ensure mongoose connected
 
-    const { username, password } = await req.json();
+    const { username, gpCode, financialYear, password } = await req.json();
 
     if (!username || !password) {
       return NextResponse.json(
@@ -37,9 +37,18 @@ export async function POST(req: NextRequest) {
       message: "Login successful ✅",
       admin: {
         id: admin._id,
-        gramPanchayat: admin.gramPanchayat,
         username: admin.username,
         role: admin.role,
+        gpCode: admin.gpCode,
+        gpName: admin.gpName,
+        address: admin.address,
+        tehsil: admin.tehsil,
+        district: admin.district,
+        pincode: admin.pincode,
+        phone: admin.phone,
+        mobile: admin.mobile,
+        email: admin.email,
+        profileImg: admin.profileImg,
       },
     });
 

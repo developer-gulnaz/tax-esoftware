@@ -1,10 +1,10 @@
 //import node modules libraries
 "use client";
-import useAdmin from "hooks/useAdmin";
 import { IconLock, IconLogin2 } from "@tabler/icons-react";
+import useAdmin from "hooks/useAdmin";
 import Link from "next/link";
 import React from "react";
-import { Dropdown, Image } from "react-bootstrap";
+import { Dropdown } from "react-bootstrap";
 
 //import routes files
 // import { UserMenuItem } from "routes/HeaderRoute";
@@ -32,8 +32,8 @@ const UserMenu = () => {
       <Dropdown.Toggle as={CustomToggle}>
         <Avatar
           type="image"
-          src={getAssetPath("/images/avatar/avatar-15.jpg")}
-          size="sm"
+          src={getAssetPath("/images/avatar/avatar.jpg")}
+          size="xs"
           alt="User Avatar"
           className="rounded-circle"
         />
@@ -56,7 +56,7 @@ const UserMenu = () => {
 
         <div className="border-dashed border-top mb-2 pt-2 px-2">
           <Link
-            href=""
+            href="/changePassword"
             className="text-secondary fw-bold d-flex align-items-center gap-2">
             <span>
               <IconLock size={20} strokeWidth={1.5} />
@@ -67,7 +67,7 @@ const UserMenu = () => {
         
         <div className="mb-4 pt-4 px-3">
           <Link
-            href=""
+            href="logout"
             className="text-secondary fw-bold d-flex align-items-center gap-2"
             onClick={(e) => {
               e.preventDefault(); // prevent default link behavior

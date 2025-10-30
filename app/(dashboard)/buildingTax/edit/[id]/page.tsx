@@ -1,7 +1,7 @@
 "use client";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
-import { Row, Col, Form, Button, Spinner } from "react-bootstrap";
+import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
 
 export default function EditBuildingTaxPage() {
   const router = useRouter();
@@ -76,6 +76,10 @@ export default function EditBuildingTaxPage() {
     setLoading(false);
   };
 
+  const handleCancel = () => {
+    router.push("/buildingTax");
+  };
+
   if (fetching)
     return (
       <div className="text-center mt-5">
@@ -95,22 +99,13 @@ export default function EditBuildingTaxPage() {
                 <Col md={6}>
                   <Form.Group>
                     <Form.Label>इमारतीचा प्रकार</Form.Label>
-                    <Form.Select
+                    <Form.Control
+                      type="text"
                       name="buildingType"
                       value={formData.buildingType}
                       onChange={handleChange}
                       required
-                    >
-                      <option value="">-- निवडा --</option>
-                      <option value="rcc">आरसीसी पद्धतीची इमारत</option>
-                      <option value="brick">
-                        दगड, विटांची व चुना किंवा सिमेंट वापरून उभारलेली इमारत
-                      </option>
-                      <option value="mudbrick">
-                        दगड, किंवा विटा वापरलेली मातीची इमारत
-                      </option>
-                      <option value="hut">झोपडी किंवा मातीची इमारत</option>
-                    </Form.Select>
+                    />
                   </Form.Group>
                 </Col>
 
@@ -154,12 +149,24 @@ export default function EditBuildingTaxPage() {
                 </Col>
 
                 <Col md={12} className="text-end mt-3">
-                  <Button type="submit" className="px-4" disabled={loading}>
+                  <Button
+                    type="submit"
+                    className="px-4 me-2"
+                    disabled={loading}
+                  >
                     {loading ? (
                       <Spinner size="sm" animation="border" />
                     ) : (
                       "सुधारणा जतन करा"
                     )}
+                  </Button>
+                  <Button
+                    variant="danger"
+                    className="px-4"
+                    onClick={handleCancel}
+                    disabled={loading}
+                  >
+                    रद्द करा
                   </Button>
                 </Col>
               </Row>

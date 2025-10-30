@@ -2,7 +2,7 @@
 import BuildingDescriptionTable from "components/table/BuildingDescriptionTable";
 import FamilyMember from "components/table/FamilyMembers";
 import { Button, Col, Row, Table } from "node_modules/react-bootstrap/esm";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 
 export default function AddPropertyForm() {
@@ -25,6 +25,26 @@ export default function AddPropertyForm() {
         );
     };
 
+    const [govtSchemeList, setGovtSchemeList] = useState([]);
+    useEffect(() => {
+        const fetchGovtScheme = async () => {
+            try {
+                const res = await fetch("/api/govtScheme");
+                const json = await res.json();
+
+                if (Array.isArray(json.data)) {
+                    setGovtSchemeList(json.data);
+                } else {
+                    setGovtSchemeList([]);
+                }
+            }
+            catch (error) {
+                console.error("Error fetching govt scheme details:", error);
+                setGovtSchemeList([]);
+            }
+        }
+        fetchGovtScheme();
+    }, []);
 
     const [taxList, setTaxList] = useState([]);
     useEffect(() => {
@@ -87,10 +107,31 @@ export default function AddPropertyForm() {
             prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]
         );
     };
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+
+        data.selectedTaxes = selectedTaxes;
+        data.selectedAkarani = selectedAkarani;
+        data.buildingDescriptions = rows; // from BuildingDescriptionTable (if you lift state)
+        data.buildingUsage = selectedTypes;
+
+        const res = await fetch("/api/property", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+
+        const json = await res.json();
+        if (json.success) alert("Property added successfully!");
+        else alert("Error adding property!");
+    };
 
     return (
-        <form className="container-fluid py-4">
+        <form className="container-fluid py-4" onSubmit={handleSubmit}>
             {/* मालकाची माहिती */}
             <Row>
                 <Col md={9}>
@@ -506,7 +547,7 @@ export default function AddPropertyForm() {
                     <Col md={3}>
                         <label className="form-label">तेथे जमीन आहे?</label>
                         <select name="jamin" className="form-select valid">
-                            <option value="0" selected="selected">नाही</option>
+                            <option value="0" defaultValue="selected">नाही</option>
                             <option value="1">होय</option>
                         </select>
                     </Col>
@@ -569,9 +610,12 @@ export default function AddPropertyForm() {
                     <Col md={6}>
                         <label className="form-label">योजनेचे नाव</label>
                         <select className="form-select">
-                            <option>-- निवडा --</option>
-                            <option>-- 1 --</option>
-                            <option>-- 2 --</option>
+                            <option value="">-- निवडा --</option>
+                            {govtSchemeList.map((scheme, index) => (
+                                <option key={scheme.id || index} value={scheme.schemeName}>
+                                    {scheme.schemeName}
+                                </option>
+                            ))}
                         </select>
                     </Col>
                     <Col md={3}>
@@ -595,5 +639,8 @@ export default function AddPropertyForm() {
             </div>
             <Button className="mt-3">नवीन जोडा</Button>
         </form >
+
     );
+
+
 }

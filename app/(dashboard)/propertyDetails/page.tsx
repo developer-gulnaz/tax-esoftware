@@ -1,6 +1,6 @@
 "use client";
 
-import { IconBuildingWarehouse } from "@tabler/icons-react";
+import { IconBuildingWarehouse, IconEdit, IconPrinter, IconTrash } from "@tabler/icons-react";
 import TablePagination from "components/table/TablePagination";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -21,6 +21,17 @@ interface PropertyData {
 }
 
 export default function PropertyDetailsPage() {
+  const [form, setForm] = useState<any>({
+    propertyCode: "",
+    propertyNumber: "",
+    address: "",
+    ownerName: "",
+    occupantName: "",
+    description: "",
+    isSelected: "",
+    seeMore: "",
+  });
+
   const router = useRouter();
   const [data, setData] = useState<PropertyData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,6 +40,8 @@ export default function PropertyDetailsPage() {
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10); // default must be 10
   const [total, setTotal] = useState<number>(0);
+  const [editId, setEditId] = useState<string | null>(null);
+
 
   // Protect route
   useEffect(() => {
@@ -41,46 +54,68 @@ export default function PropertyDetailsPage() {
   }, []);
 
   // Fetch data whenever page or limit changes
-  useEffect(() => {
-    let aborted = false;
-    async function fetchData() {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/property?page=${page}&limit=${pageSize}`, {
-          cache: "no-store",
-        });
 
-        if (!res.ok) {
-          const txt = await res.text();
-          throw new Error(`API error ${res.status}: ${txt}`);
-        }
+  let aborted = false;
+  async function fetchData() {
 
-        const json = await res.json();
-        const items = json?.data ?? json?.items ?? (Array.isArray(json) ? json : null);
-        const t = json?.total ?? json?.count ?? (Array.isArray(json) ? json.length : 0);
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/property?page=${page}&limit=${pageSize}`, {
+        cache: "no-store",
+      });
 
-        if (!items) {
-          console.warn("Unexpected API shape:", json);
-          setData([]);
-          setTotal(0);
-        } else {
-          setData(items);
-          setTotal(t);
-        }
-      } catch (err) {
-        console.error("Error fetching property list:", err);
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(`API error ${res.status}: ${txt}`);
+      }
+
+      const json = await res.json();
+      const items = json?.data ?? json?.items ?? (Array.isArray(json) ? json : null);
+      const t = json?.total ?? json?.count ?? (Array.isArray(json) ? json.length : 0);
+
+      if (!items) {
+        console.warn("Unexpected API shape:", json);
         setData([]);
         setTotal(0);
-      } finally {
-        if (!aborted) setLoading(false);
+      } else {
+        setData(items);
+        setTotal(t);
       }
+    } catch (err) {
+      console.error("Error fetching property list:", err);
+      setData([]);
+      setTotal(0);
+    } finally {
+      if (!aborted) setLoading(false);
     }
+  }
+  useEffect(() => {
+
 
     fetchData();
     return () => {
       aborted = true;
     };
   }, [page, pageSize]);
+
+
+  const handleEdit = async (item: any) => {
+    setEditId(item._id);
+    setForm(item);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("तुम्हाला खात्री आहे का?")) return;
+
+    const res = await fetch(`/api/property?id=${id}`, {
+      method: "DELETE",
+    });
+
+    if (res.ok) {
+      alert("Deleted!");
+      fetchData();
+    }
+  };
 
   return (
     <div className="custom-container">
@@ -111,7 +146,7 @@ export default function PropertyDetailsPage() {
               </div>
             ) : (
               <>
-                <Table hover responsive className="borderless align-middle mb-0">
+                <Table hover responsive className="borderless compact-table align-middle mb-0">
                   <thead className="bg-light fw-semibold border-btm">
                     <tr>
                       <th>
@@ -157,10 +192,31 @@ export default function PropertyDetailsPage() {
                           <td>{item.description || "-"}</td>
                           <td>{item.seeMore || "अजून पहा"}</td>
                           <td>
-                            <div className="d-flex gap-2">
-                              <button className="btn btn-sm btn-outline-primary">Edit</button>
-                              <button className="btn btn-sm btn-outline-danger">Delete</button>
-                            </div>
+                            <Button
+                              size="sm"
+                              variant="warning"
+                              className="me-2"
+                              onClick={() => handleEdit(item)}
+                            >
+                              <IconEdit size={15} />
+                            </Button>
+                            {/* Enable delete if needed */}
+                            <Button
+                              size="sm"
+                              variant="danger"
+                              className="me-2"
+                              onClick={() => handleDelete(item._id)}
+                            >
+                              <IconTrash size={15} />
+                            </Button>
+                           
+                            <Button
+                              size="sm"
+                              variant="info"
+                              // onClick={() => handleDelete(item._id)}
+                            >
+                              <IconPrinter size={15} />
+                            </Button>
                           </td>
                         </tr>
                       ))

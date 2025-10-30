@@ -194,7 +194,7 @@ html.expanded #miniSidebar {
   .nav-link {
     white-space: nowrap;
     overflow: hidden;
-    padding: 10px 12px;
+    padding: 8px 15px;
     color: var(--#{$prefix}gray-600);
     font-weight: 600;
     margin: 0.125rem 0.5rem;
@@ -206,7 +206,7 @@ html.expanded #miniSidebar {
       display: inline;
       margin-left: 0.25rem;
       font-weight: 600;
-      font-size: 16px;
+      font-size: 14px;
       vertical-align: middle;
     }
 
