@@ -3,8 +3,10 @@ import path from "path";
 
 const isProd = process.env.NODE_ENV === "production";
 
+console.log(">>> NODE_ENV:", process.env.NODE_ENV);
+console.log(">>> BASE PATH:", isProd ? "/sign-in" : "");
+
 const nextConfig: NextConfig = {
-  /* config options here */
   reactStrictMode: true,
   basePath: isProd ? "/sign-in" : "",
   assetPrefix: isProd ? "/sign-in/" : "",
@@ -14,7 +16,6 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // output: "export",
   env: {
     NEXT_PUBLIC_BASE_PATH: isProd ? "/sign-in" : "",
   },
