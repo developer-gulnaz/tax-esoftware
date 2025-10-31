@@ -23,13 +23,6 @@ export interface TeamsProps {
   tasksAssigned: number;
 }
 
-export interface ActivityLogType {
-  description: string;
-  timestamp: string;
-
-  colorClass: string;
-}
-
 export type Task = {
   id: string;
   title: string;

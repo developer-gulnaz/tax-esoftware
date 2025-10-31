@@ -6,7 +6,6 @@ import { Swiper, SwiperRef, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
 //import required data files
-import { EventList } from "data/DashboardData";
 import { getAssetPath } from "helper/assetPath";
 
 const UpcomingMeetingSlider = () => {
@@ -83,31 +82,7 @@ const UpcomingMeetingSlider = () => {
               }}
               className="blog-swiper"
             >
-              {EventList.map((item, index) => (
-                <SwiperSlide key={index}>
-                  <Card className="border">
-                    <CardBody>
-                      <div>
-                        <h4>{item.title}</h4>
-                        <div className="d-flex align-items-center gap-3 text-secondary">
-                          <span>{item.date}</span>
-                          <span>{item.time}</span>
-                        </div>
-
-                        <div className="d-flex align-items-center gap-2 text-secondary mt-4">
-                          <Image src={getAssetPath("/images/svg/zoom.svg")} alt="" />
-                          <span>Zoom</span>
-                        </div>
-                      </div>
-                      <div className="d-grid mt-4">
-                        <Button href="#!" variant="primary">
-                          Join
-                        </Button>
-                      </div>
-                    </CardBody>
-                  </Card>
-                </SwiperSlide>
-              ))}
+             
             </Swiper>
           </Col>
         </Row>

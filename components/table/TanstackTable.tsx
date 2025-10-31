@@ -157,7 +157,7 @@ function TanstackTable<TData>({
         </Table>
       </div>
 
-      {pagination && <TablePagination table={table} hasIcon={showIcon} />}
+      {/* {pagination && <TablePagination table={table} hasIcon={showIcon} />} */}
     </Fragment>
   );
 }

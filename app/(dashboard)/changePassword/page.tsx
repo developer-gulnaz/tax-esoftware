@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 
-export default function TaxAssessmentPage() {
+export default function ChangePasswordPage() {
   const router = useRouter();
 
   useEffect(() => {
