@@ -20,10 +20,10 @@ const PropertySchema = new mongoose.Schema({
   phone: Number,
   email: String,
   dateOfBirth: Date,
-  image: String,
+  image: {type: String, require: false},
 
   // कर तपशील
-  selectedTaxes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tax" }],
+  selectedTaxes: [{ type: mongoose.Schema.Types.ObjectId, ref: "TaxDetails" }],
 
   // मालमत्तेची माहिती
   propertyNumber: { type: String, required: true },
@@ -36,7 +36,7 @@ const PropertySchema = new mongoose.Schema({
   remarks: String,
 
   // आकारणी तपशील
-  selectedAkarani: [{ type: mongoose.Schema.Types.ObjectId, ref: "Tax" }],
+  selectedAkarani: [{ type: mongoose.Schema.Types.ObjectId, ref: "TaxDetails" }],
 
   // जमिनिचे व इमारतीचे तपशील
   usageTypes: [String],
@@ -96,7 +96,7 @@ const PropertySchema = new mongoose.Schema({
   schemeRemarks: String,
   animalName: String,
   animalCount: Number,
-});
+}, { timestamps: true });
 
 const Property =
   mongoose.models.Property || mongoose.model("Property", PropertySchema);

@@ -1,21 +1,25 @@
 import type { NextConfig } from "next";
 import path from "path";
 
+const isProd = process.env.NODE_ENV === "production";
+
 const nextConfig: NextConfig = {
+  /* config options here */
   reactStrictMode: true,
-  images: { unoptimized: true },
-  eslint: { ignoreDuringBuilds: true },
+  basePath: isProd ? "/" : "",
+  assetPrefix: isProd ? "//" : "",
+  images: {
+    unoptimized: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  // output: "export",
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isProd ? "/" : "",
+  },
   sassOptions: {
     includePaths: [path.join(__dirname, "node_modules")],
-  },
-  async redirects() {
-    return [
-      {
-        source: "/",
-        destination: "/sign-in",
-        permanent: false, // temporary redirect so you can still adjust it later
-      },
-    ];
   },
 };
 

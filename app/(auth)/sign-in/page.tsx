@@ -60,7 +60,7 @@ const SignIn = () => {
       sessionStorage.setItem("admin", JSON.stringify(data.admin));
 
       // On success, redirect to dashboard
-      router.push("/");
+      router.push("/dashboard");
     } catch (err) {
       console.error("Login error:", err);
       setError("Something went wrong");

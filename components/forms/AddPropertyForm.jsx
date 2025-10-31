@@ -110,26 +110,66 @@ export default function AddPropertyForm() {
 
     const [buildingDescriptions, setBuildingDescriptions] = useState([]);
 
+    // 🔹 FORM SUBMIT HANDLER
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData.entries());
 
-        data.selectedTaxes = selectedTaxes;
-        data.selectedAkarani = selectedAkarani;
-        data.buildingDescriptions = buildingDescriptions; // from BuildingDescriptionTable (if you lift state)
-        data.buildingUsage = selectedTypes;
+        // Convert number & boolean fields
+        const parsed = {
+            ...data,
+            mobile: Number(data.mobile || 0),
+            phone: Number(data.phone || 0),
+            mAnnualAmount: Number(data.mAnnualAmount || 0),
+            fhAge: Number(data.fhAge || 0),
+            memberCount: Number(data.memberCount || 0),
+            boy: Number(data.boy || 0),
+            girl: Number(data.girl || 0),
+            vidhva: Number(data.vidhva || 0),
+            isRental: data.isRental === "1",
+            landArea: Number(data.landArea || 0),
+            landAreaFeet: Number(data.landAreaFeet || 0),
+            landAreaMeter: Number(data.landAreaMeter || 0),
+            rentedMemberCount: Number(data.rentedMemberCount || 0),
 
-        const res = await fetch("/api/property", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-        });
+            selectedTaxes,
+            selectedAkarani,
+            buildingUsage: selectedTypes,
+            buildingDescriptions,
+        };
 
-        const json = await res.json();
-        if (json.success) alert("Property added successfully!");
-        else alert("Error adding property!");
+        // 🔸 File Upload (optional)
+        const imageFile = formData.get("image");
+        if (imageFile && imageFile.size > 0) {
+            // Optional: handle file upload separately to cloud / local server
+            console.log("Image file selected:", imageFile.name);
+        }
+
+        try {
+            const res = await fetch("/api/property", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(parsed),
+            });
+
+            const json = await res.json();
+
+            if (json.success) {
+                alert("🏠 Property added successfully!");
+                e.target.reset();
+                setSelectedTaxes([]);
+                setSelectedAkarani([]);
+                setSelectedTypes([]);
+                setBuildingDescriptions([]);
+            } else {
+                alert("❌ Error: " + json.error);
+            }
+        } catch (error) {
+            console.error("Submit error:", error);
+            alert("⚠️ Something went wrong!");
+        }
     };
 
     return (
@@ -641,7 +681,7 @@ export default function AddPropertyForm() {
                     </Col>
                 </Row>
             </div>
-            <Button className="mt-3">नवीन जोडा</Button>
+            <Button className="mt-3" type="submit">नवीन जोडा</Button>
         </form >
 
     );

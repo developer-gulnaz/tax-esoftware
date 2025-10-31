@@ -9,7 +9,7 @@ export const DashboardMenu: MenuItemType[] = [
   {
     id: uuid(),
     title: "डॅशबोर्ड",
-    link: "/",
+    link: "/dashboard",
     icon: <IconLayoutDashboard size={20} strokeWidth={1.5} />,
   },
   {

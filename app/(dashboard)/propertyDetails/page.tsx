@@ -165,7 +165,7 @@ export default function PropertyDetailsPage() {
                       <th>मालकाचे नाव</th>
                       <th>भोगवटा करणान्याचे नाव</th>
                       <th>मालमत्तेचे वर्णन</th>
-                      <th>अजून पहा</th>
+                      {/* <th>अजून पहा</th> */}
                       <th>व्यवस्थापन</th>
                     </tr>
                   </thead>
@@ -190,7 +190,7 @@ export default function PropertyDetailsPage() {
                           <td>{item.ownerName}</td>
                           <td>{item.occupantName || "-"}</td>
                           <td>{item.description || "-"}</td>
-                          <td>{item.seeMore || "अजून पहा"}</td>
+                          {/* <td>{item.seeMore || "अजून पहा"}</td> */}
                           <td>
                             <Button
                               size="sm"
