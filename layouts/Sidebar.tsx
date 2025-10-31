@@ -57,7 +57,7 @@ const Sidebar: React.FC<SidebarProps> = ({ hideLogo = false, containerId }) => {
               href="/"
               className="d-none d-md-flex align-items-center gap-2"
             >
-              <span className="fw-bold fs-4 site-logo-text">{admin?.gpName || " ग्रामपंचायत"}</span>
+              <span className="fw-bold fs-4 site-logo-text">logo</span>
             </Link>
           </div>
         )}

@@ -17,11 +17,14 @@ import UserMenu from "./UserMenu";
 
 //import custom hooks
 import useMenu from "hooks/useMenu";
+import useAdmin from "hooks/useAdmin";
+
 
 const Header = () => {
   const { toggleMenuHandler, handleCollapsed } = useMenu();
 
   const isTablet = useMediaQuery({ maxWidth: 990 });
+  const admin = useAdmin();
 
   return (
     <Fragment>
@@ -70,6 +73,9 @@ const Header = () => {
             className="d-flex align-items-center mb-0 gap-2"
           >
 
+            <ListGroup.Item as="li">
+              <span className="fw-bold fs-6 site-logo-text">{admin?.gpName || " ग्रामपंचायत"}</span>
+            </ListGroup.Item>
             <ListGroup.Item as="li">
               <UserMenu />
             </ListGroup.Item>

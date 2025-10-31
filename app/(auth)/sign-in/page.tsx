@@ -45,7 +45,7 @@ const SignIn = () => {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, financialYear }),
       });
 
       const data = await res.json();
@@ -76,12 +76,7 @@ const SignIn = () => {
         <Col xl={{ span: 4, offset: 4 }} md={12}>
           <div className="text-center">
             <h1 className="mb-1">Welcome Back</h1>
-            <p className="mb-0">
-              Don’t have an account yet?
-              <Link href="#" className="text-primary ms-1">
-                Register here
-              </Link>
-            </p>
+           
           </div>
         </Col>
       </Row>

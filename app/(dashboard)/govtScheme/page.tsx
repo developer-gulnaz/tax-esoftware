@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { IconBuildingCommunity } from "@tabler/icons-react";
+import { IconBuildingCommunity, IconEdit, IconTrash } from "@tabler/icons-react";
+
 import { useRouter } from "next/navigation";
 import TablePagination from "components/table/TablePagination";
 import { Button, Table, Spinner, Row, Col, Modal } from "react-bootstrap";
@@ -87,36 +88,36 @@ export default function GovtSchemePage() {
                   </thead>
                   <tbody>
                     {data.length ? (
-                      data.map((item, idx) => (
+                      data.map((item: any, idx) => (
                         <tr key={item._id}>
                           <td>{(page - 1) * pageSize + idx + 1}</td>
                           <td>{item.schemeName}</td>
                           <td>{item.schemeCode}</td>
                           <td>{item.description || "—"}</td>
                           <td>{formatDate(item.createdAt)}</td>
+
                           <td>
                             <Button
                               size="sm"
-                              variant="outline-primary"
+                              variant="warning"
                               className="me-2"
                               onClick={() =>
                                 router.push(`/govtScheme/edit/${item._id}`)
-                              }
-                            >
-                              Edit
+                              }                            >
+                              <IconEdit size={15} />
                             </Button>
-
+                            {/* Enable delete if needed */}
                             <Button
                               size="sm"
-                              variant="outline-danger"
+                              variant="danger"
                               onClick={() => {
                                 setSelectedId(item._id);
                                 setShowModal(true);
-                              }}
-                            >
-                              Delete
+                              }}                                              >
+                              <IconTrash size={15} />
                             </Button>
                           </td>
+
                         </tr>
                       ))
                     ) : (

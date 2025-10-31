@@ -3,7 +3,7 @@
 import { IconLock, IconLogin2 } from "@tabler/icons-react";
 import useAdmin from "hooks/useAdmin";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { Dropdown } from "react-bootstrap";
 
 //import routes files
@@ -27,8 +27,10 @@ const CustomToggle = React.forwardRef<HTMLAnchorElement, UserToggleProps>(
 
 const UserMenu = () => {
   const admin = useAdmin();
+  const [show, setShow] = useState(false);
+
   return (
-    <Dropdown>
+    <Dropdown show={show} onToggle={(nextShow) => setShow(nextShow)}>
       <Dropdown.Toggle as={CustomToggle}>
         <Avatar
           type="image"
@@ -38,22 +40,13 @@ const UserMenu = () => {
           className="rounded-circle"
         />
       </Dropdown.Toggle>
-      <Dropdown.Menu align="end" className="p-0 dropdown-menu-sm">
+      <Dropdown.Menu
+        align="end"
+        className={`p-0 dropdown-menu-sm animated-fade-scale ${show ? "show" : ""}`}
+      >
         <div className="align-items-center border-dashed border-bottom px-4 py-4">
           <h4 className="mb-0 fs-6 text-center">{admin?.username || "username"}</h4>
         </div>
-        {/* <div className="p-3 d-flex flex-column gap-1">
-          {UserMenuItem.map((item) => (
-            <Dropdown.Item
-              key={item.id}
-              className="d-flex align-items-center gap-2"
-            >
-              <span>{item.icon}</span>
-              <span>{item.title}</span>
-            </Dropdown.Item>
-          ))}
-        </div> */}
-
         <div className="border-dashed border-top mb-2 pt-2 px-2">
           <Link
             href="/changePassword"
@@ -82,8 +75,6 @@ const UserMenu = () => {
             <span>लॉग आऊट</span>
           </Link>
         </div>
-
-
       </Dropdown.Menu>
     </Dropdown>
   );

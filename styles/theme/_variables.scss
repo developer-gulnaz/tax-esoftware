@@ -1535,3 +1535,49 @@ $social-buttons: (
 .border-btm tr {
   border-bottom: 1px solid #ccc;
 }
+
+@keyframes fadeScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95) translateY(-5px
+    );
+}
+
+60% {
+  opacity: 1;
+  transform: scale(1.02) translateY(0);
+}
+
+100% {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+}
+
+@keyframes fadeScaleOut {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.95) translateY(-5px);
+  }
+}
+
+.animated-fade-scale {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+}
+
+.animated-fade-scale.show {
+  opacity: 1;
+  pointer-events: auto;
+  animation: fadeScaleIn 0.25s ease forwards;
+}
+
+.animated-fade-scale:not(.show) {
+  animation: fadeScaleOut 0.2s ease forwards;
+}
