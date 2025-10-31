@@ -21,7 +21,7 @@ export default function AddPropertyPage() {
     <Row className="g-4">
       <h3 className="fw-bold mb-4">मालमत्ता नोंदणी फॉर्म</h3>
       <Col md={12}>
-        <div className="p-4 bg-light shadow-sm rounded-3">
+        <div className="pY-4 bg-light shadow-sm rounded-3">
           <AddPropertyForm />
         </div>
       </Col>

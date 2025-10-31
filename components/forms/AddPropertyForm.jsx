@@ -107,7 +107,9 @@ export default function AddPropertyForm() {
             prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]
         );
     };
-    
+
+    const [buildingDescriptions, setBuildingDescriptions] = useState([]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -116,7 +118,7 @@ export default function AddPropertyForm() {
 
         data.selectedTaxes = selectedTaxes;
         data.selectedAkarani = selectedAkarani;
-        data.buildingDescriptions = rows; // from BuildingDescriptionTable (if you lift state)
+        data.buildingDescriptions = buildingDescriptions; // from BuildingDescriptionTable (if you lift state)
         data.buildingUsage = selectedTypes;
 
         const res = await fetch("/api/property", {
@@ -381,9 +383,11 @@ export default function AddPropertyForm() {
             {/* इमारत प्रकारानुसार दर */}
             <div className="mt-5">
                 <h5>इमारत प्रकारानुसार दर</h5>
-                <Row className="g-3">
-                    <BuildingDescriptionTable />
-                </Row>
+                <BuildingDescriptionTable
+                    rows={buildingDescriptions}
+                    setRows={setBuildingDescriptions}
+                />
+
             </div>
             <hr />
 

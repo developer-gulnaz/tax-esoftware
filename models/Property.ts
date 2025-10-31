@@ -4,8 +4,6 @@ const BuildingDescriptionSchema = new mongoose.Schema({
   buildingType: String,
   taxRate: Number,
   usageType: String,
-  areaLength: Number,
-  areaWidth: Number,
   floor: String,
   floor1: String,
   floor2: String,
