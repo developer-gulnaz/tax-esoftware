@@ -6,8 +6,8 @@ const isProd = process.env.NODE_ENV === "production";
 const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
-  basePath: isProd ? "/" : "",
-  assetPrefix: isProd ? "//" : "",
+  basePath: isProd ? "/sign-in" : "",
+  assetPrefix: isProd ? "/sign-in/" : "",
   images: {
     unoptimized: true,
   },
@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
   },
   // output: "export",
   env: {
-    NEXT_PUBLIC_BASE_PATH: isProd ? "/" : "",
+    NEXT_PUBLIC_BASE_PATH: isProd ? "/sign-in" : "",
   },
   sassOptions: {
     includePaths: [path.join(__dirname, "node_modules")],
