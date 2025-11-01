@@ -5,40 +5,50 @@ import SessionModel from "models/Session";
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 
+// ✅ Helper to safely extract client IP
+function getClientIp(req: NextRequest): string {
+  const forwarded = req.headers.get("x-forwarded-for");
+  if (forwarded) return forwarded.split(",")[0].trim();
+  return req.headers.get("x-real-ip") || "unknown";
+}
+
 export async function POST(req: NextRequest) {
   try {
-    await dbConnect(); // ✅ ensure MongoDB connection
+    await dbConnect(); // ensure MongoDB is connected
 
     const { username, gpCode, financialYear, password } = await req.json();
 
     if (!username || !password) {
       return NextResponse.json(
-        { message: "Missing username or password" },
+        { success: false, message: "Missing username or password" },
         { status: 400 }
       );
     }
 
     const admin = await Admin.findOne({ username: username.trim() });
-
     if (!admin) {
-      return NextResponse.json({ message: "Admin not found" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: "Admin not found" },
+        { status: 404 }
+      );
     }
 
     const isValid = await bcrypt.compare(password, admin.password);
     if (!isValid) {
       return NextResponse.json(
-        { message: "Invalid password" },
+        { success: false, message: "Invalid password" },
         { status: 401 }
       );
     }
 
-    // ✅ Create secure random session ID
+    // ✅ Create secure session
     const sessionId = crypto.randomBytes(32).toString("hex");
+    const oneHour = 60 * 60 * 1000;
+    const expiresAt = new Date(Date.now() + oneHour);
 
-    // ✅ Set expiry (e.g., 1 day)
-    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    const ip = getClientIp(req);
+    const userAgent = req.headers.get("user-agent") || "unknown";
 
-    // ✅ Store session in MongoDB
     await SessionModel.create({
       sessionId,
       userId: admin._id,
@@ -46,13 +56,16 @@ export async function POST(req: NextRequest) {
       role: admin.role,
       expiresAt,
       revoked: false,
-      ip: req.headers.get("x-forwarded-for") || req.ip || "unknown",
-      userAgent: req.headers.get("user-agent") || "unknown",
+      ip,
+      userAgent,
       data: { gpCode, financialYear },
+      active: true,
+      lastActiveAt: new Date(),
     });
 
-    // ✅ Set HTTP-only secure cookie
+    // ✅ Set secure session cookie
     const response = NextResponse.json({
+      success: true,
       message: "Login successful ✅",
       admin: {
         id: admin._id,
@@ -71,19 +84,19 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    response.cookies.set("session_id", sessionId, {
+    response.cookies.set("sid", sessionId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 24 * 60 * 60, // 1 day
+      maxAge: oneHour / 1000, // 1 hour
       path: "/",
     });
 
     return response;
   } catch (error: any) {
-    console.error("Login Error:", error.message);
+    console.error("Login Error:", error);
     return NextResponse.json(
-      { message: error.message || "Internal Server Error" },
+      { success: false, message: "Internal Server Error", error: error.message },
       { status: 500 }
     );
   }
