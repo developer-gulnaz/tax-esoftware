@@ -10,6 +10,7 @@ import {
   Button,
   Spinner,
   Table,
+  Modal
 } from "react-bootstrap";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 
@@ -27,7 +28,10 @@ export default function BuildingTypePage() {
   // Pagination state (1-based)
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10); // default must be 10
-  const [total, setTotal] = useState<number>(0);
+  const [total, setTotal] = useState<number>(0);  
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+
 
   const fetchData = async () => {
     const res = await fetch(`/api/buildingType?page=${page}&limit=${pageSize}`);
@@ -76,17 +80,25 @@ export default function BuildingTypePage() {
     setForm(item);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("तुम्हाला खात्री आहे का?")) return;
+  // const handleDelete = async (id: string) => {
+  //   if (!confirm("तुम्हाला खात्री आहे का?")) return;
 
-    const res = await fetch(`/api/taxDetails?id=${id}`, {
-      method: "DELETE",
-    });
+  //   const res = await fetch(`/api/buildingType?id=${id}`, {
+  //     method: "DELETE",
+  //   });
 
-    if (res.ok) {
-      alert("Deleted!");
-      fetchData();
-    }
+  //   if (res.ok) {
+  //     setShowModal(false);
+  //     fetchData();
+  //   }
+  // };
+
+    // ✅ Delete
+  const handleDelete = async () => {
+    if (!selectedId) return;
+    await fetch(`/api/buildingType?id=${selectedId}`, { method: "DELETE" });
+    setData((prev) => prev.filter((item) => item._id !== selectedId));
+    setShowModal(false);
   };
 
   const totalPages = Math.ceil(total / pageSize);
@@ -166,7 +178,10 @@ export default function BuildingTypePage() {
                       <Button
                         size="sm"
                         variant="danger"
-                        onClick={() => handleDelete(item._id)}
+                        onClick={() => {
+                          setSelectedId(item._id!);
+                          setShowModal(true);
+                        }}
                       >
                         <IconTrash size={15} />
                       </Button>
@@ -194,6 +209,23 @@ export default function BuildingTypePage() {
         </Col>
 
       </Row>
+
+      {/* Delete Modal */}
+      <Modal show={showModal} centered>
+        <Modal.Header>
+          <Modal.Title>वापराचे प्रकार हटवा</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>हे वापराचे प्रकार हटवू इच्छिता?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            रद्द
+          </Button>
+          <Button variant="danger" onClick={handleDelete}>
+            हटवा
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
     </div>
   );
 

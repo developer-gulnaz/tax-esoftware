@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "lib/db";
-import BuildingTax from "models/BuildingTax";
+import BuildingTaxRate from "models/BuildingTaxRate";
 import { ObjectId } from "mongodb";
 
 // ✅ CREATE NEW BUILDING TAX
@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const data = await req.json();
-    const saved = await BuildingTax.create(data);
+    const saved = await BuildingTaxRate.create(data);
     return NextResponse.json({ message: "✅ Added Successfully", data: saved });
   } catch (error: any) {
     return NextResponse.json({ message: error.message }, { status: 500 });
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
 
     if (id) {
       // ✅ GET BY ID
-      const data = await BuildingTax.findById(id);
+      const data = await BuildingTaxRate.findById(id);
       if (!data) return NextResponse.json({ message: "Not found" }, { status: 404 });
       return NextResponse.json({ success: true, data });
     }
@@ -34,8 +34,8 @@ export async function GET(req: NextRequest) {
     const limit = Number(req.nextUrl.searchParams.get("limit")) || 10;
     const skip = (page - 1) * limit;
 
-    const total = await BuildingTax.countDocuments({});
-    const taxes = await BuildingTax.find()
+    const total = await BuildingTaxRate.countDocuments({});
+    const taxes = await BuildingTaxRate.find()
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
@@ -55,7 +55,7 @@ export async function PUT(req: NextRequest) {
 
     const body = await req.json();
 
-    const updated = await BuildingTax.findByIdAndUpdate(
+    const updated = await BuildingTaxRate.findByIdAndUpdate(
       new ObjectId(id),
       { $set: body },
       { new: true }
@@ -77,7 +77,7 @@ export async function DELETE(req: NextRequest) {
     const id = req.nextUrl.searchParams.get("id");
     if (!id) return NextResponse.json({ message: "ID missing" }, { status: 400 });
 
-    const deleted = await BuildingTax.findByIdAndDelete(new ObjectId(id));
+    const deleted = await BuildingTaxRate.findByIdAndDelete(new ObjectId(id));
     if (!deleted)
       return NextResponse.json({ message: "Not found" }, { status: 404 });
 

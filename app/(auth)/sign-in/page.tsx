@@ -1,6 +1,6 @@
 "use client";
 
-import { IconEyeOff } from "@tabler/icons-react";
+import { IconEyeOff, IconEye } from "@tabler/icons-react";
 import Flex from "components/common/Flex";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -24,12 +24,12 @@ const SignIn = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [gpCode, setGPCode] = useState("");
-
+  const [showPassword, setShowPassword] = useState(false);
   const [financialYear, setFinancialYear] = useState("");
 
   // Generate financial years from 2022-2023 to 2003-2004
   const years = [];
-  for (let y = 2022; y >= 2003; y--) {
+  for (let y = 2024; y >= 2022; y--) {
     years.push(`${y}-${y + 1}`);
   }
 
@@ -76,7 +76,7 @@ const SignIn = () => {
         <Col xl={{ span: 4, offset: 4 }} md={12}>
           <div className="text-center">
             <h1 className="mb-1">Welcome Back</h1>
-           
+
           </div>
         </Col>
       </Row>
@@ -140,32 +140,28 @@ const SignIn = () => {
                   <FormLabel htmlFor="password">Password</FormLabel>
                   <div className="password-field position-relative">
                     <FormControl
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       id="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      className="fakePassword"
+                      className="fakePassword pe-5"
                     />
-                    <span>
-                      <IconEyeOff className="passwordToggler" size={16} />
+                    <span
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="position-absolute end-0 top-50 translate-middle-y me-3"
+                      style={{ cursor: "pointer" }}
+                    >
+                      {showPassword ? (
+                        <IconEye size={18} stroke={1.5} />
+                      ) : (
+                        <IconEyeOff size={18} stroke={1.5} />
+                      )}
                     </span>
                   </div>
                   <Feedback type="invalid">Please enter password.</Feedback>
                 </div>
 
-                <Flex
-                  className="mb-4"
-                  alignItems="center"
-                  justifyContent="between"
-                >
-                  <FormCheck label="Remember me" type="checkbox" />
-                  <div>
-                    <Link href="" className="text-primary">
-                      Forgot Password
-                    </Link>
-                  </div>
-                </Flex>
 
                 {error && (
                   <p className="text-danger text-center mb-3">{error}</p>

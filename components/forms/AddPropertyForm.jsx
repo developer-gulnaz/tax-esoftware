@@ -1,5 +1,6 @@
 "use client";
 import BuildingDescriptionTable from "components/table/BuildingDescriptionTable";
+import BuildingTypeTable from "components/table/BuildingTypeTable";
 import FamilyMember from "components/table/FamilyMembers";
 import { Button, Col, Row, Table } from "node_modules/react-bootstrap/esm";
 import { useEffect, useState } from "react";
@@ -46,6 +47,7 @@ export default function AddPropertyForm() {
         fetchGovtScheme();
     }, []);
 
+
     const [taxList, setTaxList] = useState([]);
     useEffect(() => {
         const fetchTaxes = async () => {
@@ -90,25 +92,26 @@ export default function AddPropertyForm() {
 
 
     // for Akarani selection
-    const [selectedAkarani, setSelectedAkarani] = useState([]);
-    const [selectAllAkarani, setSelectAllAkarani] = useState(false);
+    // const [selectedAkarani, setSelectedAkarani] = useState([]);
+    // const [selectAllAkarani, setSelectAllAkarani] = useState(false);
 
-    const handleSelectAllAkarani = () => {
-        if (selectAllAkarani) {
-            setSelectedAkarani([]);
-        } else {
-            setSelectedAkarani(taxList.map(t => t._id));
-        }
-        setSelectAllAkarani(!selectAllAkarani);
-    };
+    // const handleSelectAllAkarani = () => {
+    //     if (selectAllAkarani) {
+    //         setSelectedAkarani([]);
+    //     } else {
+    //         setSelectedAkarani(taxList.map(t => t._id));
+    //     }
+    //     setSelectAllAkarani(!selectAllAkarani);
+    // };
 
-    const handleAkaraniChange = (id) => {
-        setSelectedAkarani(prev =>
-            prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]
-        );
-    };
+    // const handleAkaraniChange = (id) => {
+    //     setSelectedAkarani(prev =>
+    //         prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]
+    //     );
+    // };
 
     const [buildingDescriptions, setBuildingDescriptions] = useState([]);
+    const [buildingTypes, setBuildingTypes] = useState([]);
 
     // 🔹 FORM SUBMIT HANDLER
     const handleSubmit = async (e) => {
@@ -136,7 +139,7 @@ export default function AddPropertyForm() {
 
             selectedTaxes,
             selectedAkarani,
-            buildingUsage: selectedTypes,
+            buildingTypes,
             buildingDescriptions,
         };
 
@@ -161,7 +164,7 @@ export default function AddPropertyForm() {
                 e.target.reset();
                 setSelectedTaxes([]);
                 setSelectedAkarani([]);
-                setSelectedTypes([]);
+                setBuildingTypes([]);
                 setBuildingDescriptions([]);
             } else {
                 alert("❌ Error: " + json.error);
@@ -249,26 +252,26 @@ export default function AddPropertyForm() {
 
             {/* मालमत्तेची माहिती */}
             <Row>
-                <Col md={9} className="mt-5">
+                <Col md={12} className="mt-5">
                     <h5>मालमत्तेची माहिती:</h5>
                     <Row className="g-3">
-                        <Col md={4}>
+                        <Col md={3}>
                             <label className="form-label">मालमत्ता क्र *</label>
                             <input type="text" name="propertyNumber" className="form-control" />
                         </Col>
-                        <Col md={4}>
+                        <Col md={3}>
                             <label className="form-label">मालमत्ता कोड</label>
                             <input type="text" name="propertyCode" className="form-control" />
                         </Col>
-                        <Col md={4}>
+                        <Col md={3}>
                             <label className="form-label">व्याप्त</label>
                             <input type="text" name="kabjedar" className="form-control" />
                         </Col>
-                        <Col md={4}>
+                        <Col md={3}>
                             <label className="form-label">मालमत्तेचे वर्णन</label>
                             <input type="text" name="propertyType" className="form-control" />
                         </Col>
-                        <Col md={4}>
+                        <Col md={3}>
                             <label className="form-label">मालमत्ता पत्ता</label>
                             <select className="form-select">
                                 <option>-- निवडा --</option>
@@ -280,19 +283,15 @@ export default function AddPropertyForm() {
                                 <option value={"वार्ड क्र. -6"}> वार्ड क्र. -6 </option>
                             </select>
                         </Col>
-                        <Col md={4}>
+                        <Col md={3}>
                             <label className="form-label">आकारणी तारीख</label>
                             <input type="date" name="mDate" className="form-control" />
                         </Col>
-                        <Col md={4}>
+                        <Col md={3}>
                             <label className="form-label">वार्षिक आकारणी रक्कम</label>
                             <input type="number" name="mAnnualAmount" className="form-control" />
                         </Col>
-                        {/* <Col md={4}>
-                            <label className="form-label">कुटुंबांची संख्या</label>
-                            <input type="number" name="familyMemberCount" className="form-control" min="0" />
-                        </Col> */}
-                        <Col md={4}>
+                        <Col md={3}>
                             <label className="form-label">शेरा</label>
                             <textarea className="form-control" name="remarks" rows="2"></textarea>
                         </Col>
@@ -300,7 +299,7 @@ export default function AddPropertyForm() {
                 </Col>
 
                 {/* आकारणी जोडण्यासाठी? */}
-                <Col md={3} className="mt-5">
+                {/* <Col md={3} className="mt-5">
                     <h5>आकारणी जोडण्यासाठी?</h5>
                     <div className="form-check mb-2">
                         <input
@@ -331,57 +330,14 @@ export default function AddPropertyForm() {
                         ))}
 
                     </div>
-                </Col>
+                </Col> */}
             </Row>
             <hr />
 
             {/* जमिनिचे व इमारतीचे तपशील */}
             <div className="mt-5">
                 <h5>जमिनिचे आणि इमारतीचे तपशील</h5>
-                <Row className="mb-3 align-items-center">
-                    <Col xs="12">
-                        <label className="form-label me-3 mb-0">वापराचे प्रकार</label>
-                        <div className="d-inline-flex align-items-center flex-wrap">
-                            <div className="form-check me-4 mb-0">
-                                <input
-                                    type="checkbox"
-                                    className="form-check-input"
-                                    id="usageType1"
-                                    value="निवासी"
-                                />
-                                <label className="form-check-label ms-1" htmlFor="usageType1">
-                                    निवासी
-                                </label>
-                            </div>
-
-                            <div className="form-check me-4 mb-0">
-                                <input
-                                    type="checkbox"
-                                    className="form-check-input"
-                                    id="usageType2"
-                                    value="अनिवासी"
-                                />
-                                <label className="form-check-label ms-1" htmlFor="usageType2">
-                                    अनिवासी
-                                </label>
-                            </div>
-
-                            <div className="form-check mb-0">
-                                <input
-                                    type="checkbox"
-                                    className="form-check-input"
-                                    id="usageType3"
-                                    value="खुला भुखंड"
-                                />
-                                <label className="form-check-label ms-1" htmlFor="usageType3">
-                                    खुला भुखंड
-                                </label>
-                            </div>
-                        </div>
-                    </Col>
-                </Row>
-
-
+             
                 <Row className="g-3">
                     <Col md={4}>
                         <label className="form-label">जमिनिचे क्षेत्रफळ</label>
@@ -434,85 +390,11 @@ export default function AddPropertyForm() {
             {/* इमारत वापर तपशील */}
             <div className="mt-5">
                 <h5>इमारत वापर तपशील</h5>
-
-                <Row className="align-items-center mb-3">
-                    <Col xs="12">
-                        <label className="form-label me-3 mb-0">इमारत वापर प्रयोजन</label>
-                        <div className="d-inline-flex align-items-center flex-wrap">
-                            <div className="form-check me-4 mb-0">
-                                <input
-                                    type="checkbox"
-                                    className="form-check-input"
-                                    id="usageCommercial"
-                                    name="buildingUsage"
-                                    value="वाणिज्यीक"
-                                    checked={selectedTypes.includes("वाणिज्यीक")}
-                                    onChange={handleCheckboxChange}
-                                />
-                                <label className="form-check-label ms-1" htmlFor="usageCommercial">
-                                    वाणिज्यीक
-                                </label>
-                            </div>
-
-                            <div className="form-check me-4 mb-0">
-                                <input
-                                    type="checkbox"
-                                    className="form-check-input"
-                                    id="usageIndustrial"
-                                    name="buildingUsage"
-                                    value="औद्योगिक"
-                                    checked={selectedTypes.includes("औद्योगिक")}
-                                    onChange={handleCheckboxChange}
-                                />
-                                <label className="form-check-label ms-1" htmlFor="usageIndustrial">
-                                    औद्योगिक
-                                </label>
-                            </div>
-                        </div>
-                    </Col>
-                </Row>
-
-                <Table responsive size="sm" className="align-middle">
-                    <thead>
-                        <tr>
-                            <th>बांधकाचे वर्णन</th>
-                            <th>क्षेत्रफळ लांबी x रुंदी</th>
-                            <th>चौ. फुट</th>
-                            <th>चौ. मिटर</th>
-                            <th>वर्ष</th>
-                            <th>तळ मजला</th>
-                            <th>मजला क. 1</th>
-                            <th>मजला क. 2</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>वाणिज्यीक</td>
-                            {[...Array(7)].map((_, i) => (
-                                <td key={i}>
-                                    <input
-                                        type="text"
-                                        className="form-control form-control-sm"
-                                        disabled={!selectedTypes.includes("वाणिज्यीक")}
-                                    />
-                                </td>
-                            ))}
-                        </tr>
-
-                        <tr>
-                            <td>औद्योगिक</td>
-                            {[...Array(7)].map((_, i) => (
-                                <td key={i}>
-                                    <input
-                                        type="text"
-                                        className="form-control form-control-sm"
-                                        disabled={!selectedTypes.includes("औद्योगिक")}
-                                    />
-                                </td>
-                            ))}
-                        </tr>
-                    </tbody>
-                </Table>
+                <BuildingTypeTable
+                    rows={buildingTypes}
+                    setRows={setBuildingTypes}
+                />
+              
             </div>
             <hr />
 

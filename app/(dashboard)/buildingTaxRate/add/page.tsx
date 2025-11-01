@@ -1,18 +1,18 @@
 "use client";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Row, Spinner } from "react-bootstrap";
 
-export default function EditBuildingTaxPage() {
+export default function AddBuildingTaxRatePage() {
   const router = useRouter();
-  const { id } = useParams();
   const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(true);
 
   const [formData, setFormData] = useState({
     buildingType: "",
     areaSize: "",
-    taxRate: "",
+    constructionRate: "",
+    buildingRate: "",
+    taxRate: 0,
     description: "",
   });
 
@@ -22,29 +22,10 @@ export default function EditBuildingTaxPage() {
     if (!admin) router.push("/sign-in");
   }, [router]);
 
-  // ✅ Change Page Title
+  // ✅ Page Title
   useEffect(() => {
-    document.title = "कर दर सुधारणा";
+    document.title = "नवीन कर दर";
   }, []);
-
-  // ✅ Fetch Existing Value
-  useEffect(() => {
-    if (!id) return;
-    fetch(`/api/buildingTax?id=${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data?.data) {
-          setFormData({
-            buildingType: data.data.buildingType || "",
-            areaSize: data.data.areaSize || "",
-            taxRate: data.data.taxRate || "",
-            description: data.data.description || "",
-          });
-        }
-        setFetching(false);
-      })
-      .catch(() => setFetching(false));
-  }, [id]);
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -55,8 +36,8 @@ export default function EditBuildingTaxPage() {
     setLoading(true);
 
     try {
-      const res = await fetch(`/api/buildingTax?id=${id}`, {
-        method: "PUT",
+      const res = await fetch("/api/buildingTaxRate", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
@@ -64,8 +45,8 @@ export default function EditBuildingTaxPage() {
       const result = await res.json();
 
       if (res.ok) {
-        alert("✅ सुधारणा यशस्वी!");
-        router.push("/buildingTax");
+        alert("✅ कर दर यशस्वीरित्या जतन झाला!");
+        router.push("/buildingTaxRate");
       } else {
         alert("❌ " + result.message);
       }
@@ -76,20 +57,9 @@ export default function EditBuildingTaxPage() {
     setLoading(false);
   };
 
-  const handleCancel = () => {
-    router.push("/buildingTax");
-  };
-
-  if (fetching)
-    return (
-      <div className="text-center mt-5">
-        <Spinner animation="border" />
-      </div>
-    );
-
   return (
     <div className="custom-container">
-      <h3 className="fw-bold mb-4">कर दर सुधारणा</h3>
+      <h3 className="fw-bold mb-4">नवीन कर दर</h3>
 
       <Row className="g-4">
         <Col md={12}>
@@ -128,9 +98,15 @@ export default function EditBuildingTaxPage() {
                     <Form.Control
                       type="number"
                       name="taxRate"
-                      value={formData.taxRate}
-                      onChange={handleChange}
-                      required
+                      step="0.01"              // allows decimals
+                      min="0"
+                      value={formData.taxRate ?? ""}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          taxRate: parseFloat(parseFloat(e.target.value || "0").toFixed(2)),
+                        })
+                      }
                     />
                   </Form.Group>
                 </Col>
@@ -149,24 +125,12 @@ export default function EditBuildingTaxPage() {
                 </Col>
 
                 <Col md={12} className="text-end mt-3">
-                  <Button
-                    type="submit"
-                    className="px-4 me-2"
-                    disabled={loading}
-                  >
+                  <Button type="submit" className="px-4" disabled={loading}>
                     {loading ? (
                       <Spinner size="sm" animation="border" />
                     ) : (
-                      "सुधारणा जतन करा"
+                      "जतन करा"
                     )}
-                  </Button>
-                  <Button
-                    variant="danger"
-                    className="px-4"
-                    onClick={handleCancel}
-                    disabled={loading}
-                  >
-                    रद्द करा
                   </Button>
                 </Col>
               </Row>

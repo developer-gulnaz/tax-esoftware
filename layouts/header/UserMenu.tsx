@@ -57,16 +57,22 @@ const UserMenu = () => {
             <span>संकेतशब्द बदला</span>
           </Link>
         </div>
-        
+
         <div className="mb-4 pt-4 px-3">
           <Link
-            href="logout"
+            href="#"
             className="text-secondary fw-bold d-flex align-items-center gap-2"
-            onClick={(e) => {
-              e.preventDefault(); // prevent default link behavior
-              // Logout logic
-              sessionStorage.removeItem("admin");
-              window.location.href = "/sign-in"; // redirect to login
+            onClick={async (e) => {
+              e.preventDefault();
+
+              try {
+                await fetch("/api/logout", { method: "POST" });
+              } catch (err) {
+                console.error("Logout failed:", err);
+              } finally {
+                sessionStorage.removeItem("admin");
+                window.location.href = "/sign-in";
+              }
             }}
           >
             <span>

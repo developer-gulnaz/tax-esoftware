@@ -1,18 +1,18 @@
 import mongoose, { Schema, models } from "mongoose";
 
-const BuildingTaxSchema = new Schema(
+const BuildingTaxRateSchema = new Schema(
     {
         buildingType: { type: String, required: true },
         areaSize: { type: Number, required: true },
         buildingRate: { type: Number, default: 0, require: false },
-        constructionRate: { type: Number, default: 0, require: false },
+        constructionRate: { type: Number, default: 0, require: false, min: 0 },
         taxRate: { type: Number, required: true },
         description: { type: String },
     },
     { timestamps: true }
 );
 
-const BuildingTax =
-    models.BuildingTax || mongoose.model("BuildingTax", BuildingTaxSchema);
+const BuildingTaxRate =
+    models.BuildingTaxRate || mongoose.model("BuildingTaxRate", BuildingTaxRateSchema);
 
-export default BuildingTax;
+export default BuildingTaxRate;

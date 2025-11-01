@@ -14,19 +14,19 @@ import {
   Table
 } from "react-bootstrap";
 
-interface BuildingTaxData {
+interface BuildingTaxRateData {
   _id: string;
   buildingType: string;
   // buildingRate: number;
   // constructionRate: number;
-  taxRate: string;
+  taxRate: number;
   createdAt: string;
   isSelected?: boolean;
 }
 
-export default function BuildingTaxPage() {
+export default function BuildingTaxRatePage() {
   const router = useRouter();
-  const [data, setData] = useState<BuildingTaxData[]>([]);
+  const [data, setData] = useState<BuildingTaxRateData[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -53,7 +53,7 @@ export default function BuildingTaxPage() {
     async function fetchData() {
       setLoading(true);
       try {
-        const res = await fetch(`/api/buildingTax?page=${page}&limit=${pageSize}`);
+        const res = await fetch(`/api/buildingTaxRate?page=${page}&limit=${pageSize}`);
         const json = await res.json();
 
         if (!aborted) {
@@ -77,7 +77,7 @@ export default function BuildingTaxPage() {
   const handleDelete = async () => {
     if (!selectedId) return;
     try {
-      const res = await fetch(`/api/buildingTax?id=${selectedId}`, { method: "DELETE" });
+      const res = await fetch(`/api/buildingTaxRate?id=${selectedId}`, { method: "DELETE" });
 
       if (!res.ok) throw new Error("Failed to delete");
 
@@ -100,7 +100,7 @@ export default function BuildingTaxPage() {
       <div className="mb-5">
         <Button
           className="border-0 mx-2 btn btn-primary"
-          onClick={() => router.push("/buildingTax/add")}
+          onClick={() => router.push("/buildingTaxRate/add")}
         >
           नवीन कर दर जोडा
         </Button>
@@ -144,7 +144,7 @@ export default function BuildingTaxPage() {
 
                           {/* <td>{item.buildingRate}</td>
                           <td>{item.constructionRate}</td> */}
-                          <td>{item.taxRate}</td>
+                          <td>{(item.taxRate).toFixed(2)}</td>
                           <td>{formatDate(item.createdAt)}</td>
                           <td>
                             <div className="d-flex gap-2">
@@ -152,7 +152,7 @@ export default function BuildingTaxPage() {
                                 size="sm"
                                 variant="outline-primary"
                                 onClick={() =>
-                                  router.push(`/buildingTax/edit/${item._id}`)
+                                  router.push(`/buildingTaxRate/edit/${item._id}`)
                                 }
                               >
                                 Edit

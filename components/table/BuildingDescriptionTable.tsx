@@ -4,16 +4,12 @@ import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { Button, Form, Table } from "react-bootstrap";
 
-// ------------------
-// ✅ Type Definitions
-// ------------------
 interface BuildingRow {
   buildingType: string;
   taxRate: string | number;
   usageType: string;
-  floor: string;
-  floor1: string;
-  floor2: string;
+  floorName: string; // 👈 one dropdown instead of 3 separate fields
+  dimension: string; // 👈 to enter "20x30"
   sqFt: string | number;
   sqM: string | number;
   year: string | number;
@@ -24,9 +20,6 @@ interface BuildingDescriptionTableProps {
   setRows: React.Dispatch<React.SetStateAction<BuildingRow[]>>;
 }
 
-// ------------------
-// ✅ Component
-// ------------------
 export default function BuildingDescriptionTable({
   rows,
   setRows,
@@ -41,53 +34,22 @@ export default function BuildingDescriptionTable({
   useEffect(() => {
     const fetchBuildingTax = async () => {
       try {
-        const res = await fetch("/api/buildingTax");
+        const res = await fetch("/api/buildingTaxRate");
         const json = await res.json();
-        console.log("Building Tax Response:", json);
-
-        if (Array.isArray(json.data)) {
-          setBuildingTaxList(json.data);
-        } else if (Array.isArray(json)) {
-          setBuildingTaxList(json);
-        } else {
-          setBuildingTaxList([]);
-        }
+        if (Array.isArray(json.data)) setBuildingTaxList(json.data);
+        else if (Array.isArray(json)) setBuildingTaxList(json);
+        else setBuildingTaxList([]);
       } catch (error) {
         console.error("Error fetching building tax details:", error);
         setBuildingTaxList([]);
       }
     };
-
     fetchBuildingTax();
   }, []);
 
   // ------------------
-  // Row Handlers
+  // Helpers
   // ------------------
-  const addRow = () => {
-    setRows([
-      ...rows,
-      {
-        buildingType: "",
-        taxRate: "",
-        usageType: "",
-        floor: "",
-        floor1: "",
-        floor2: "",
-        sqFt: "",
-        sqM: "",
-        year: "",
-      },
-    ]);
-  };
-
-  const removeRow = (index: number) => {
-    const updated = [...rows];
-    updated.splice(index, 1);
-    setRows(updated);
-  };
-
-
   const parseArea = (value: string): number => {
     const parts = value.toLowerCase().split("x");
     if (parts.length === 2) {
@@ -101,12 +63,36 @@ export default function BuildingDescriptionTable({
     return 0;
   };
 
+  // ------------------
+  // Row Handlers
+  // ------------------
+  const addRow = () => {
+    setRows([
+      ...rows,
+      {
+        buildingType: "",
+        taxRate: "",
+        usageType: "",
+        floorName: "",
+        dimension: "",
+        sqFt: "",
+        sqM: "",
+        year: "",
+      },
+    ]);
+  };
+
+  const removeRow = (index: number) => {
+    const updated = [...rows];
+    updated.splice(index, 1);
+    setRows(updated);
+  };
+
   const handleChange = (index: number, field: keyof BuildingRow, value: any) => {
     const updated = [...rows];
-
     updated[index][field] = value;
 
-    // ✅ If buildingType changes → auto taxRate
+    // ✅ Auto-fill taxRate when buildingType changes
     if (field === "buildingType") {
       const selectedTax = buildingTaxList.find(
         (tax) => tax.buildingType === value
@@ -114,17 +100,11 @@ export default function BuildingDescriptionTable({
       updated[index].taxRate = selectedTax?.taxRate ?? "";
     }
 
-    // ✅ Auto calculate sqFt and sqM if any floor value changes
-    if (["floor", "floor1", "floor2"].includes(field)) {
-      const floorArea =
-        parseArea(updated[index].floor) +
-        parseArea(updated[index].floor1) +
-        parseArea(updated[index].floor2);
-
-      updated[index].sqFt = floorArea ? floorArea.toFixed(0) : "";
-      updated[index].sqM = floorArea
-        ? (floorArea * 0.092903).toFixed(3)
-        : "";
+    // ✅ Auto-calculate area when dimension changes
+    if (field === "dimension") {
+      const area = parseArea(value);
+      updated[index].sqFt = area ? area.toFixed(0) : "";
+      updated[index].sqM = area ? (area * 0.092903).toFixed(3) : "";
     }
 
     setRows(updated);
@@ -135,19 +115,20 @@ export default function BuildingDescriptionTable({
   // ------------------
   return (
     <div className="mt-4">
-      <h6 className="fw-bold mb-3">बांधकाचे वर्णन</h6>
+      {/* <h6 className="fw-bold mb-3">बांधकाचे वर्णन</h6> */}
 
-      <Table responsive hover className="align-middle text-center table-sm compact-table">
+      <Table
+        responsive
+        hover
+        className="align-middle text-center table-sm compact-table"
+      >
         <thead className="table-light">
           <tr>
             <th>मालमत्तेचे वर्णन</th>
             <th>कराचा दर (पैसे)</th>
             <th>वापराचे प्रकार</th>
-            {/* <th>लांबी (ft)</th>
-            <th>रुंदी (ft)</th> */}
-            <th>तळ मजला</th>
-            <th>मजला क. 1</th>
-            <th>मजला क. 2</th>
+            <th>मजला निवडा</th>
+            <th>क्षेत्रफळ</th>
             <th>चौ. फुट</th>
             <th>चौ. मिटर</th>
             <th>वर्ष</th>
@@ -158,6 +139,7 @@ export default function BuildingDescriptionTable({
         <tbody>
           {rows.map((row, index) => (
             <tr key={index}>
+              {/* Building Type */}
               <td>
                 <Form.Select
                   value={row.buildingType}
@@ -167,26 +149,24 @@ export default function BuildingDescriptionTable({
                 >
                   <option value="">-- निवडा --</option>
                   {buildingTaxList.map((tax, i) => (
-                    <option key={tax.buildingType + i} value={tax.buildingType}>
+                    <option key={i} value={tax.buildingType}>
                       {tax.buildingType}
                     </option>
                   ))}
                 </Form.Select>
               </td>
 
-              {/* कराचा दर */}
+              {/* Tax Rate */}
               <td>
                 <Form.Control
                   type="number"
                   value={row.taxRate}
-                  onChange={(e) =>
-                    handleChange(index, "taxRate", e.target.value)
-                  }
-                  // placeholder="उदा. 1.25"
-                  readOnly // ✅ optional, since auto-filled
+                  readOnly
+                  placeholder="दर"
                 />
               </td>
 
+              {/* Usage Type */}
               <td>
                 <Form.Select
                   value={row.usageType}
@@ -200,64 +180,42 @@ export default function BuildingDescriptionTable({
                   <option value="commercial">वाणिज्यिक</option>
                 </Form.Select>
               </td>
-              {/* 
+
+              {/* Floor Name Dropdown */}
               <td>
-                <Form.Control
-                  type="number"
-                  placeholder="लांबी"
-                  value={row.areaLength}
+                <Form.Select
+                  value={row.floorName}
                   onChange={(e) =>
-                    handleChange(index, "areaLength", e.target.value)
+                    handleChange(index, "floorName", e.target.value)
                   }
-                />
+                >
+                  <option value="">-- मजला निवडा --</option>
+                  <option value="तळ मजला">तळ मजला</option>
+                  <option value="मजला क. 1">मजला क. 1</option>
+                  <option value="मजला क. 2">मजला क. 2</option>
+                  <option value="मजला क. 3">मजला क. 2</option>
+                  <option value="इतर">इतर</option>
+                </Form.Select>
               </td>
 
+              {/* Dimension Input */}
               <td>
                 <Form.Control
-                  type="number"
-                  placeholder="रुंदी"
-                  value={row.areaWidth}
+                  type="text"
+                  placeholder="उदा. 20x30"
+                  value={row.dimension}
                   onChange={(e) =>
-                    handleChange(index, "areaWidth", e.target.value)
+                    handleChange(index, "dimension", e.target.value)
                   }
                 />
-              </td> */}
-
-              <td>
-                <Form.Control
-                  type="text"
-                  placeholder="तळ मजला"
-                  value={row.floor}
-                  onChange={(e) => handleChange(index, "floor", e.target.value)}
-                />
               </td>
 
-              <td>
-                <Form.Control
-                  type="text"
-                  placeholder="मजला क. 1"
-                  value={row.floor1}
-                  onChange={(e) => handleChange(index, "floor1", e.target.value)}
-                />
-              </td>
-
-              <td>
-                <Form.Control
-                  type="text"
-                  placeholder="मजला क. 2"
-                  value={row.floor2}
-                  onChange={(e) => handleChange(index, "floor2", e.target.value)}
-                />
-              </td>
+              {/* Area fields */}
               <td>
                 <Form.Control
                   type="number"
-                  placeholder="चौ. फुट"
-                  value={row.sqFt
-                    // row.areaLength && row.areaWidth
-                    //   ? Number(row.areaLength) * Number(row.areaWidth)
-                    //   : ""
-                  }
+                  value={row.sqFt}
+                  placeholder="sq.ft"
                   readOnly
                 />
               </td>
@@ -265,16 +223,13 @@ export default function BuildingDescriptionTable({
               <td>
                 <Form.Control
                   type="number"
-                  placeholder="चौ. मिटर"
-                  value={row.sqM
-                    // row.areaLength && row.areaWidth
-                    //   ? (Number(row.areaLength) * Number(row.areaWidth) * 0.092903).toFixed(2)
-                    //   : ""
-                  }
+                  value={row.sqM}
+                  placeholder="sq.m"
                   readOnly
                 />
-
               </td>
+
+              {/* Year */}
               <td>
                 <Form.Control
                   type="number"
@@ -284,7 +239,8 @@ export default function BuildingDescriptionTable({
                 />
               </td>
 
-              <td className="text-center">
+              {/* Actions */}
+              <td>
                 <Button
                   variant="danger"
                   size="sm"
@@ -303,6 +259,6 @@ export default function BuildingDescriptionTable({
           <IconPlus size={16} />
         </Button>
       </div>
-    </div >
+    </div>
   );
 }

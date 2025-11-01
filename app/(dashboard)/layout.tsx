@@ -1,7 +1,7 @@
 //import custom components
 import Header from "layouts/header/Header";
 import Sidebar from "layouts/Sidebar";
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
 interface DashboardProps {
   children: React.ReactNode;
 }
@@ -14,7 +14,7 @@ const DashboardLayout: React.FC<DashboardProps> = ({ children }) => {
         <Header />
         <div className='custom-container'>{children}</div>
         <div className='custom-container'>
-          
+          <SpeedInsights />
         </div>
       </div>
     </div>

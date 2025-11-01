@@ -18,7 +18,7 @@ export const DashboardMenu: MenuItemType[] = [
     icon: <IconDatabaseCog size={20} strokeWidth={1.5} />,
     children: [
       // { id: uuid(), name: "फॅमिली मास्टर", link: "familyTree" },
-      { id: uuid(), name: "इमारत कर", link: "buildingTax" },
+      { id: uuid(), name: "इमारत कर", link: "buildingTaxRate" },
       { id: uuid(), name: "इमारत प्रकार", link: "buildingType" },
       { id: uuid(), name: "योजना", link: "govtScheme" },
     ],

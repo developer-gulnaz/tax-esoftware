@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
 
     const total = await BuildingType.countDocuments();
     const list = await BuildingType.find()
-      .sort({ code: 1 })
+      .sort({ code: -1 })
       .skip(skip)
       .limit(limit);
 

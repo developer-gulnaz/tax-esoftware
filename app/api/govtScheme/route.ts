@@ -8,22 +8,28 @@ export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
+
+    if (!body.schemeName || !body.schemeCode) {
+      return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
+    }
+
     const saved = await GovtScheme.create(body);
     return NextResponse.json({ success: true, data: saved });
   } catch (error: any) {
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 }
 
-// ✅ READ (all + pagination + getById)
+// ✅ READ
 export async function GET(req: NextRequest) {
   try {
     await dbConnect();
-
     const id = req.nextUrl.searchParams.get("id");
+
     if (id) {
       const scheme = await GovtScheme.findById(id);
-      if (!scheme) return NextResponse.json({ message: "Not found" }, { status: 404 });
+      if (!scheme)
+        return NextResponse.json({ success: false, message: "Not found" }, { status: 404 });
       return NextResponse.json({ success: true, data: scheme });
     }
 
@@ -39,7 +45,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ success: true, data: schemes, total });
   } catch (error: any) {
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 }
 
@@ -48,18 +54,17 @@ export async function PUT(req: NextRequest) {
   try {
     await dbConnect();
     const id = req.nextUrl.searchParams.get("id");
-    if (!id) return NextResponse.json({ message: "ID missing" }, { status: 400 });
+    if (!id) return NextResponse.json({ success: false, message: "ID missing" }, { status: 400 });
 
     const body = await req.json();
-    const updated = await GovtScheme.findByIdAndUpdate(
-      new ObjectId(id),
-      { $set: body },
-      { new: true }
-    );
+    const updated = await GovtScheme.findByIdAndUpdate(new ObjectId(id), { $set: body }, { new: true });
+
+    if (!updated)
+      return NextResponse.json({ success: false, message: "Not found" }, { status: 404 });
 
     return NextResponse.json({ success: true, data: updated });
   } catch (error: any) {
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 }
 
@@ -68,11 +73,14 @@ export async function DELETE(req: NextRequest) {
   try {
     await dbConnect();
     const id = req.nextUrl.searchParams.get("id");
-    if (!id) return NextResponse.json({ message: "ID missing" }, { status: 400 });
+    if (!id) return NextResponse.json({ success: false, message: "ID missing" }, { status: 400 });
 
-    await GovtScheme.findByIdAndDelete(new ObjectId(id));
+    const deleted = await GovtScheme.findByIdAndDelete(new ObjectId(id));
+    if (!deleted)
+      return NextResponse.json({ success: false, message: "Not found" }, { status: 404 });
+
     return NextResponse.json({ success: true, message: "Deleted successfully" });
   } catch (error: any) {
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 }
