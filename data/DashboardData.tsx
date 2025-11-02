@@ -21,7 +21,7 @@ export const DashboardStatsData: DashboardStatType[] = [
     icon: <IconListDetails size={35} strokeWidth={1.5} />, // Assessment Document
     bgColor: "bg-gradient-success",
     textColor: "text-success-emphasis",
-    link: "/valuationRegister",
+    link: "/assessment8",
   },
   {
     id: uuid(),
@@ -29,7 +29,7 @@ export const DashboardStatsData: DashboardStatType[] = [
     icon: <IconCashBanknote size={35} strokeWidth={1.5} />, // Tax Collection
     bgColor: "bg-gradient-info",
     textColor: "text-danger-emphasis",
-    link: "/taxAssessment/"
+    link: "/assessment10/"
   },
   {
     id: uuid(),

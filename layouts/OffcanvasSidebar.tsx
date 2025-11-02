@@ -1,18 +1,16 @@
 "use client";
 //import node modules libraries
-import { Image } from "react-bootstrap";
 import useAdmin from "hooks/useAdmin";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import OffcanvasBody from "react-bootstrap/OffcanvasBody";
 import OffcanvasHeader from "react-bootstrap/OffcanvasHeader";
-import Link from "next/link";
 
 //import custom components
 import Sidebar from "./Sidebar";
 
 //import custom hooks
 import useMenu from "hooks/useMenu";
-import { getAssetPath } from "helper/assetPath";
+import Link from "node_modules/next/link";
 
 const OffcanvasSidebar = () => {
   const { showMenu, toggleMenuHandler } = useMenu();
@@ -28,19 +26,13 @@ const OffcanvasSidebar = () => {
     >
       <OffcanvasHeader closeButton>
         <Link href="/" className="d-flex align-items-center gap-2">
-          <span className="fw-bold fs-4  site-logo-text">
-            <span className="fw-bold fs-4 site-logo-text">{admin?.gramPanchayat + " ग्रामपंचायत" || "Gram Panchayat"}</span>
-
+          <span className="fw-bold fs-4  site-logo-text"> logo
+            {/* <Image src={getAssetPath("/images/brand/logo/logo-icon.svg")} alt="Logo" /> */}
           </span>
-
         </Link>
 
       </OffcanvasHeader>
       <OffcanvasBody className="p-0 ">
-        <div className="p-5 pt-0">
-          {/* <Image src={getAssetPath("/images/brand/logo/logo-icon.svg")} alt="Logo" /> */}
-          <h4> brand Logo</h4>
-        </div>
         <Sidebar hideLogo />
       </OffcanvasBody>
     </Offcanvas>

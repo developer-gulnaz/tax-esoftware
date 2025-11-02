@@ -103,7 +103,7 @@ export default function BuildingDescriptionTable({
     // ✅ Auto-calculate area when dimension changes
     if (field === "dimension") {
       const area = parseArea(value);
-      updated[index].sqFt = area ? area.toFixed(0) : "";
+      updated[index].sqFt = area ? area.toFixed(3) : "";
       updated[index].sqM = area ? (area * 0.092903).toFixed(3) : "";
     }
 

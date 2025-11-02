@@ -2,31 +2,92 @@
 import BuildingDescriptionTable from "components/table/BuildingDescriptionTable";
 import BuildingTypeTable from "components/table/BuildingTypeTable";
 import FamilyMember from "components/table/FamilyMembers";
-import { Button, Col, Row, Table } from "node_modules/react-bootstrap/esm";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { Button, Col, Row } from "react-bootstrap";
 
+interface Tax {
+    _id: string;
+    taxName: string;
+    amount: number;
+    amountType: string;
+}
+
+interface SelectedTax {
+    _id: string;
+    taxName: string;
+    amount: number;
+    amountType: string;
+}
+
+interface Scheme {
+    id?: string;
+    schemeName: string;
+}
+
+interface FormDataState {
+    [key: string]: string | number | boolean | undefined;
+    landArea?: string;
+    landAreaFeet?: string | number;
+    landAreaMeter?: string | number;
+}
 
 export default function AddPropertyForm() {
-    const [taxItems, setTaxItems] = useState([{ id: 1 }]);
+    const [taxItems, setTaxItems] = useState<{ id: number }[]>([{ id: 1 }]);
+    const [formData, setFormData] = useState<FormDataState>({});
+    const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+    const [govtSchemeList, setGovtSchemeList] = useState<Scheme[]>([]);
+    const [taxList, setTaxList] = useState<Tax[]>([]);
+    const [selectedTaxes, setSelectedTaxes] = useState<string[]>([]);
+    const [selectAllTaxes, setSelectAllTaxes] = useState(false);
+    const [buildingDescriptions, setBuildingDescriptions] = useState<any[]>([]);
+    const [buildingTypes, setBuildingTypes] = useState<any[]>([]);
 
     const addTaxItem = () => {
         setTaxItems([...taxItems, { id: Date.now() }]);
     };
 
-    const removeTaxItem = (id) => {
+    const removeTaxItem = (id: number) => {
         setTaxItems(taxItems.filter((item) => item.id !== id));
     };
 
-    const [selectedTypes, setSelectedTypes] = useState([]);
+    const handleLandAreaChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prev) => {
+            const updated = { ...prev, [name]: value };
 
-    const handleCheckboxChange = (e) => {
+            // Handle inputs like "20x30" or "20X30"
+            if (name === "landArea") {
+                const regex = /(\d+)\s*[xX]\s*(\d+)/;
+                const match = value.match(regex);
+
+                if (match) {
+                    const length = parseFloat(match[1]);
+                    const width = parseFloat(match[2]);
+
+                    if (!isNaN(length) && !isNaN(width)) {
+                        const areaFeet = length * width;
+                        const areaMeter = areaFeet * 0.092903;
+
+                        updated.landAreaFeet = areaFeet.toFixed(3);
+                        updated.landAreaMeter = areaMeter.toFixed(3);
+                    }
+                } else {
+                    updated.landAreaFeet = "";
+                    updated.landAreaMeter = "";
+                }
+            }
+
+            return updated;
+        });
+    };
+
+    const handleCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSelectedTypes((prev) =>
             prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
         );
     };
 
-    const [govtSchemeList, setGovtSchemeList] = useState([]);
     useEffect(() => {
         const fetchGovtScheme = async () => {
             try {
@@ -38,17 +99,14 @@ export default function AddPropertyForm() {
                 } else {
                     setGovtSchemeList([]);
                 }
-            }
-            catch (error) {
+            } catch (error) {
                 console.error("Error fetching govt scheme details:", error);
                 setGovtSchemeList([]);
             }
-        }
+        };
         fetchGovtScheme();
     }, []);
 
-
-    const [taxList, setTaxList] = useState([]);
     useEffect(() => {
         const fetchTaxes = async () => {
             try {
@@ -60,7 +118,6 @@ export default function AddPropertyForm() {
                 } else {
                     setTaxList([]);
                 }
-
             } catch (error) {
                 console.error("Error fetching tax details:", error);
                 setTaxList([]);
@@ -70,54 +127,30 @@ export default function AddPropertyForm() {
         fetchTaxes();
     }, []);
 
+    // ✅ Toggle a single tax checkbox
+    const handleTaxChange = (id: string) => {
+        setSelectedTaxes((prev) =>
+            prev.includes(id) ? prev.filter((taxId) => taxId !== id) : [...prev, id]
+        );
+    };
 
-    // for tax list selection
-    const [selectedTaxes, setSelectedTaxes] = useState([]);
-    const [selectAllTaxes, setSelectAllTaxes] = useState(false);
-
+    // ✅ Select/Deselect all
     const handleSelectAllTaxes = () => {
         if (selectAllTaxes) {
             setSelectedTaxes([]);
         } else {
-            setSelectedTaxes(taxList.map(t => t._id));
+            const allIds = taxList.map((tax) => tax._id);
+            setSelectedTaxes(allIds);
         }
         setSelectAllTaxes(!selectAllTaxes);
     };
 
-    const handleTaxChange = (id) => {
-        setSelectedTaxes(prev =>
-            prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]
-        );
-    };
 
-
-    // for Akarani selection
-    // const [selectedAkarani, setSelectedAkarani] = useState([]);
-    // const [selectAllAkarani, setSelectAllAkarani] = useState(false);
-
-    // const handleSelectAllAkarani = () => {
-    //     if (selectAllAkarani) {
-    //         setSelectedAkarani([]);
-    //     } else {
-    //         setSelectedAkarani(taxList.map(t => t._id));
-    //     }
-    //     setSelectAllAkarani(!selectAllAkarani);
-    // };
-
-    // const handleAkaraniChange = (id) => {
-    //     setSelectedAkarani(prev =>
-    //         prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]
-    //     );
-    // };
-
-    const [buildingDescriptions, setBuildingDescriptions] = useState([]);
-    const [buildingTypes, setBuildingTypes] = useState([]);
-
-    // 🔹 FORM SUBMIT HANDLER
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const formData = new FormData(e.target);
+        const form = e.currentTarget;
+        const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
 
         // Convert number & boolean fields
@@ -136,17 +169,13 @@ export default function AddPropertyForm() {
             landAreaFeet: Number(data.landAreaFeet || 0),
             landAreaMeter: Number(data.landAreaMeter || 0),
             rentedMemberCount: Number(data.rentedMemberCount || 0),
-
             selectedTaxes,
-            selectedAkarani,
             buildingTypes,
             buildingDescriptions,
         };
 
-        // 🔸 File Upload (optional)
-        const imageFile = formData.get("image");
+        const imageFile = formData.get("image") as File | null;
         if (imageFile && imageFile.size > 0) {
-            // Optional: handle file upload separately to cloud / local server
             console.log("Image file selected:", imageFile.name);
         }
 
@@ -161,9 +190,9 @@ export default function AddPropertyForm() {
 
             if (json.success) {
                 alert("🏠 Property added successfully!");
-                e.target.reset();
+                // ✅ Safely reset the form
+                form.reset();
                 setSelectedTaxes([]);
-                setSelectedAkarani([]);
                 setBuildingTypes([]);
                 setBuildingDescriptions([]);
             } else {
@@ -174,6 +203,7 @@ export default function AddPropertyForm() {
             alert("⚠️ Something went wrong!");
         }
     };
+
 
     return (
         <form className="container-fluid py-4" onSubmit={handleSubmit}>
@@ -217,6 +247,8 @@ export default function AddPropertyForm() {
                 <Col md={3}>
                     <small className="text-danger float-end">* आवश्यक तपशील</small>
                     <h5>कर तपशील *</h5>
+
+                    {/* सर्व निवडा checkbox */}
                     <div className="form-check mb-2">
                         <input
                             type="checkbox"
@@ -229,9 +261,11 @@ export default function AddPropertyForm() {
                             सर्व निवडा
                         </label>
                     </div>
+
+                    {/* Individual taxes */}
                     <div className="gap-3">
                         {taxList.map((tax, index) => (
-                            <div key={tax._id} className="form-check">
+                            <div key={tax._id} className="form-check mb-1">
                                 <input
                                     type="checkbox"
                                     className="form-check-input"
@@ -240,13 +274,18 @@ export default function AddPropertyForm() {
                                     onChange={() => handleTaxChange(tax._id)}
                                 />
                                 <label htmlFor={`tax${index}`} className="form-check-label">
-                                    {tax.taxName}
+                                    {tax.taxName}{" "}
+                                    <small className="text-muted">
+                                        ({tax.amountType === "रकमेमध्ये"
+                                            ? `₹${tax.amount}`
+                                            : `${tax.amount}%`})
+                                    </small>
                                 </label>
                             </div>
                         ))}
-
                     </div>
                 </Col>
+
             </Row>
             <hr />
 
@@ -293,7 +332,7 @@ export default function AddPropertyForm() {
                         </Col>
                         <Col md={3}>
                             <label className="form-label">शेरा</label>
-                            <textarea className="form-control" name="remarks" rows="2"></textarea>
+                            <input type="text" name="remark" className="form-control" />
                         </Col>
                     </Row>
                 </Col>
@@ -337,20 +376,42 @@ export default function AddPropertyForm() {
             {/* जमिनिचे व इमारतीचे तपशील */}
             <div className="mt-5">
                 <h5>जमिनिचे आणि इमारतीचे तपशील</h5>
-             
+
                 <Row className="g-3">
                     <Col md={4}>
                         <label className="form-label">जमिनिचे क्षेत्रफळ</label>
-                        <input type="number" name="landArea" className="form-control" />
+                        <input
+                            type="text"
+                            name="landArea"
+                            className="form-control"
+                            value={formData.landArea || ""}
+                            onChange={handleLandAreaChange}
+                            placeholder="उदा. 20x30"
+                        />
                     </Col>
+
                     <Col md={4}>
                         <label className="form-label">चौ. फुट</label>
-                        <input type="number" name="landAreaFeet" className="form-control" />
+                        <input
+                            type="number"
+                            name="landAreaFeet"
+                            className="form-control"
+                            value={formData.landAreaFeet || ""}
+                            readOnly
+                        />
                     </Col>
+
                     <Col md={4}>
                         <label className="form-label">चौ. मीटर</label>
-                        <input type="number" name="landAreaMeter" className="form-control" />
+                        <input
+                            type="number"
+                            name="landAreaMeter"
+                            className="form-control"
+                            value={formData.landAreaMeter || ""}
+                            readOnly
+                        />
                     </Col>
+
 
                     <Col md={4}>
                         <label className="form-label">इमारतीचे चर्तुसिमा</label>
@@ -394,7 +455,7 @@ export default function AddPropertyForm() {
                     rows={buildingTypes}
                     setRows={setBuildingTypes}
                 />
-              
+
             </div>
             <hr />
 

@@ -2,7 +2,6 @@ import connectDB from "lib/db";
 import Property from "models/Property";
 import { NextRequest, NextResponse } from "next/server";
 
-import TaxDetails from "models/TaxDetails";
 
 export async function POST(req: Request) {
   try {
@@ -50,33 +49,33 @@ export async function GET(req: NextRequest) {
     const limit = Number(req.nextUrl.searchParams.get("limit")) || 10;
     const skip = (page - 1) * limit;
 
-    // Get single property by ID
     if (id) {
-      const property = await Property.findById(id);
+      // Populate selectedTaxes with full tax details
+      const property = await Property.findById(id)
+        .populate("selectedTaxes", "taxName amount") // <-- key line
+        .lean();
+
       if (!property)
         return NextResponse.json({ success: false, message: "Not found" }, { status: 404 });
+
       return NextResponse.json({ success: true, data: property });
     }
 
-    // Get all (with pagination)
     const total = await Property.countDocuments();
     const properties = await Property.find()
+      .populate("selectedTaxes", "taxName amount amountType") // <-- populate for list as well
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .lean();
 
-    return NextResponse.json({
-      success: true,
-      data: properties,
-      total,
-      page,
-      limit,
-    });
+    return NextResponse.json({ success: true, data: properties, total, page, limit });
   } catch (error: any) {
-    console.error("Error fetching properties:", error);
+    console.error("❌ Error fetching properties:", error);
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+
 
 // ✅ DELETE (By Id)
 export async function DELETE(req: NextRequest) {

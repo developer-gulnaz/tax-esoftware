@@ -40,7 +40,7 @@ const PropertySchema = new mongoose.Schema({
 
   // जमिनिचे व इमारतीचे तपशील
   usageTypes: [String],
-  landArea: Number,
+  landArea: String,
   landAreaFeet: Number,
   landAreaMeter: Number,
   squareFoot: String,

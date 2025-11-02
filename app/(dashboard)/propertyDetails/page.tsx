@@ -149,15 +149,7 @@ export default function PropertyDetailsPage() {
                 <Table hover responsive className="borderless compact-table align-middle mb-0">
                   <thead className="bg-light fw-semibold border-btm">
                     <tr>
-                      <th>
-                        <FormCheck
-                          checked={data.length > 0 && data.every((item) => item.isSelected)}
-                          onChange={(e) => {
-                            const checked = e.target.checked;
-                            setData((prev) => prev.map((item) => ({ ...item, isSelected: checked })));
-                          }}
-                        />
-                      </th>
+                      <th></th>
                       <th>अनु नं.</th>
                       <th>मालमत्ता कोड</th>
                       <th>मालमत्ता क्रमांक</th>
