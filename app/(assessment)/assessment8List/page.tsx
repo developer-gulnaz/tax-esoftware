@@ -1,7 +1,7 @@
 "use client";
 import { useRef } from "react";
 
-export default function AkaraniRegister() {
+export default function Assessment8List() {
   const printRef = useRef<HTMLDivElement | null>(null);
 
   const handlePrint = () => window.print();
@@ -24,7 +24,7 @@ export default function AkaraniRegister() {
             {/* ====== Top Header (Title Section) ====== */}
             <tr>
               <th colSpan={5} className="top-left pb-2">
-                ग्रामपंचायत : नगरधन ग्रामपंचायत<br />
+                ग्रामपंचायत : ग्रामपंचायत Name<br />
                 तालुका : रामटेक<br />
                 जिल्हा : नागपूर
               </th>
