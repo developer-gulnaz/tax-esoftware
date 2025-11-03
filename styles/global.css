@@ -137,24 +137,6 @@
     margin-top: -38px;
 }
 
-.btn {
-    padding: 6px 12px;
-    margin-right: 10px;
-    border: 1px solid #000;
-    background: #fff;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.btn-print {
-    background: #000;
-    color: #fff;
-}
-
-.btn-cancel {
-    color: #000;
-}
-
 @media print {
     .no-print {
         display: none;

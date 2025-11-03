@@ -1,4 +1,5 @@
 import connectDB from "lib/db";
+import TaxDetails from "models/TaxDetails"; // ✅ Ensure it's imported
 import Property from "models/Property";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -52,7 +53,7 @@ export async function GET(req: NextRequest) {
     if (id) {
       // Populate selectedTaxes with full tax details
       const property = await Property.findById(id)
-        .populate("selectedTaxes", "taxName amount") // <-- key line
+        .populate("selectedTaxes", "taxName amount amountType") // <-- key line
         .lean();
 
       if (!property)

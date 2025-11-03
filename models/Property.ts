@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import "./TaxDetails";
 
 const BuildingDescriptionSchema = new mongoose.Schema({
   buildingType: String,
@@ -20,7 +21,7 @@ const PropertySchema = new mongoose.Schema({
   phone: Number,
   email: String,
   dateOfBirth: Date,
-  image: {type: String, require: false},
+  image: { type: String, require: false },
 
   // कर तपशील
   selectedTaxes: [{ type: mongoose.Schema.Types.ObjectId, ref: "TaxDetails" }],
@@ -36,7 +37,7 @@ const PropertySchema = new mongoose.Schema({
   remarks: String,
 
   // आकारणी तपशील
-  selectedAkarani: [{ type: mongoose.Schema.Types.ObjectId, ref: "TaxDetails" }],
+  // selectedAkarani: [{ type: mongoose.Schema.Types.ObjectId, ref: "TaxDetails" }],
 
   // जमिनिचे व इमारतीचे तपशील
   usageTypes: [String],

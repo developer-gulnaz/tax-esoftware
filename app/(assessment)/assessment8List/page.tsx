@@ -1,9 +1,11 @@
 "use client";
+import { Button } from "node_modules/react-bootstrap/esm";
 import { useRef } from "react";
+import useAdmin from "hooks/useAdmin";
 
 export default function Assessment8List() {
   const printRef = useRef<HTMLDivElement | null>(null);
-
+  const admin = useAdmin();
   const handlePrint = () => window.print();
   const handleCancel = () => {
     if (window.opener) window.close();
@@ -13,9 +15,9 @@ export default function Assessment8List() {
   return (
     <div style={{ background: "#fff", padding: "10px" }}>
       {/* Buttons */}
-      <div className="no-print" style={{ marginBottom: "15px" }}>
-        <button onClick={handlePrint} className="btn btn-print">Print</button>
-        <button onClick={handleCancel} className="btn btn-cancel">Cancel</button>
+      <div className="no-print mb-3 float-end">
+        <Button className="btn-sm border-0 me-2" onClick={handlePrint}>Print</Button>
+        <Button className="bg-danger btn-sm border-0" onClick={handleCancel}>Cancel</Button>
       </div>
 
       <div ref={printRef}>
@@ -24,7 +26,7 @@ export default function Assessment8List() {
             {/* ====== Top Header (Title Section) ====== */}
             <tr>
               <th colSpan={5} className="top-left pb-2">
-                ग्रामपंचायत : ग्रामपंचायत Name<br />
+                ग्रामपंचायत : {admin?.gpName}<br />
                 तालुका : रामटेक<br />
                 जिल्हा : नागपूर
               </th>

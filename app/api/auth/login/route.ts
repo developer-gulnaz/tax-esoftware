@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
     const { username, gpCode, financialYear, password } = await req.json();
 
-    if (!username || !password) {
+    if (!username || !password || !gpCode) {
       return NextResponse.json(
         { success: false, message: "Missing username or password" },
         { status: 400 }
@@ -29,6 +29,14 @@ export async function POST(req: NextRequest) {
     if (!admin) {
       return NextResponse.json(
         { success: false, message: "Admin not found" },
+        { status: 404 }
+      );
+    }
+
+    const gramPanchayat = await Admin.findOne({ gpCode: gpCode.trim() });
+    if (!gramPanchayat) {
+      return NextResponse.json(
+        { success: false, message: "Gram Panchayat not found" },
         { status: 404 }
       );
     }
