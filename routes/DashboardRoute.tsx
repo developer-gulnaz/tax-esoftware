@@ -49,7 +49,7 @@ export const DashboardMenu: MenuItemType[] = [
     title: "अहवाल",
     icon: <IconReport size={20} strokeWidth={1.5} />,
     children: [
-      { id: uuid(), name: "मूल्यांकन पत्रक (नमुना 8)", link: "assessment8" },
+      { id: uuid(), name: "मूल्यांकन पत्रक (नमुना 8)", link: "assessment8List" },
       { id: uuid(), name: "डिमांड बिल (नमुना-9 क)", link: "assessment9A" },
       { id: uuid(), name: "कर संग्रह (नमुना-10)", link: "assessment10/add" },
       { id: uuid(), name: "वसूली यादी (नमुना-10 प्रिंट)", link: "assessment10List" },

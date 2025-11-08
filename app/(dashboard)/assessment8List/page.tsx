@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  IconBuildingWarehouse,
-  IconEdit,
-  IconPrinter,
-  IconTrash,
-} from "@tabler/icons-react";
+import { IconBuildingWarehouse } from "@tabler/icons-react";
 import TablePagination from "components/table/TablePagination";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -32,6 +27,10 @@ interface PropertyData {
 }
 
 export default function PropertyDetailsPage() {
+  useEffect(() => {
+    document.title = "मालमत्ता यादी";
+  }, []);
+
   const router = useRouter();
   const [data, setData] = useState<PropertyData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -45,9 +44,7 @@ export default function PropertyDetailsPage() {
     if (!admin) router.push("/sign-in");
   }, [router]);
 
-  useEffect(() => {
-    document.title = "मालमत्ता यादी";
-  }, []);
+
 
   // ✅ Fetch property + tax data
   useEffect(() => {
@@ -106,15 +103,6 @@ export default function PropertyDetailsPage() {
     };
   }, [page, pageSize]);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("तुम्हाला खात्री आहे का?")) return;
-    const res = await fetch(`/api/property?id=${id}`, { method: "DELETE" });
-    if (res.ok) {
-      alert("Deleted!");
-      setData((prev) => prev.filter((item) => item._id !== id));
-    }
-  };
-
   const getTaxAmount = (taxes: Tax[] | undefined, taxName: string) => {
     const tax = taxes?.find((t) => t.taxName.trim() === taxName.trim());
     return tax ? tax.amount.toFixed(2) : "-";
@@ -144,7 +132,7 @@ export default function PropertyDetailsPage() {
 
       <div className="mb-5">
         {/* सर्व (All Records) */}
-        <Button
+        <Button target="_blank"
           className="border-0"
           variant="success"
           onClick={() => {
@@ -153,16 +141,19 @@ export default function PropertyDetailsPage() {
               return;
             }
 
-            // get all records visible on the current page
-            const ids = data.map((r) => r._id).join(",");
-            window.open(`/assessment8List?ids=${ids}&mode=all`, "_blank");
+            // ✅ store all property rows in sessionStorage
+            sessionStorage.setItem("assessmentRecords", JSON.stringify(data));
+
+            // ✅ open assessment page WITHOUT URL params
+            window.open("/assessment8", "_blank");
           }}
         >
           सर्व
         </Button>
 
+
         {/* निवडलेले (Selected Records) */}
-        <Button
+        <Button target="_blank"
           className="bg-danger border-0 mx-2"
           onClick={() => {
             const selected = data.filter((r) => r.isSelected);
@@ -171,12 +162,16 @@ export default function PropertyDetailsPage() {
               return;
             }
 
-            const ids = selected.map((r) => r._id).join(",");
-            window.open(`/assessment8List?ids=${ids}&mode=selected`, "_blank");
+            // ✅ Save only selected rows
+            sessionStorage.setItem("assessmentRecords", JSON.stringify(selected));
+
+            // ✅ Open page
+            window.open("/assessment8", "_blank");
           }}
         >
           निवडलेले
         </Button>
+
       </div>
 
 
@@ -208,7 +203,6 @@ export default function PropertyDetailsPage() {
                       <th>विजकर</th>
                       <th>सा.पानीपट्टी</th>
                       <th>विशेष पानीपट्टी</th>
-                      <th>व्यवस्थापन</th>
                     </tr>
                   </thead>
 
@@ -243,23 +237,6 @@ export default function PropertyDetailsPage() {
                           <td>{getTaxAmount(item.selectedTaxes, "विजकर")}</td>
                           <td>{getTaxAmount(item.selectedTaxes, "सा.पानीपट्टी")}</td>
                           <td>{getTaxAmount(item.selectedTaxes, "विशेष पानीपट्टी")}</td>
-
-                          <td>
-                            <Button size="sm" variant="warning" className="me-2">
-                              <IconEdit size={15} />
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="danger"
-                              className="me-2"
-                              onClick={() => handleDelete(item._id)}
-                            >
-                              <IconTrash size={15} />
-                            </Button>
-                            <Button size="sm" variant="info">
-                              <IconPrinter size={15} />
-                            </Button>
-                          </td>
                         </tr>
                       ))
                     ) : (

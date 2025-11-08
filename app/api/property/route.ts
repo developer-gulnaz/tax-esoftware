@@ -45,15 +45,17 @@ export async function GET(req: NextRequest) {
   try {
     await connectDB();
 
-    const id = req.nextUrl.searchParams.get("id");
-    const page = Number(req.nextUrl.searchParams.get("page")) || 1;
-    const limit = Number(req.nextUrl.searchParams.get("limit")) || 10;
+    const url = req.nextUrl;
+    const id = url.searchParams.get("id");
+    const page = Number(url.searchParams.get("page")) || 1;
+    const limit = Number(url.searchParams.get("limit")) || 10;
     const skip = (page - 1) * limit;
 
+    // ✅ If single record required
     if (id) {
-      // Populate selectedTaxes with full tax details
       const property = await Property.findById(id)
-        .populate("selectedTaxes", "taxName amount amountType") // <-- key line
+        .populate("selectedTaxes", "taxName amount amountType")
+        .select("-__v")
         .lean();
 
       if (!property)
@@ -62,20 +64,34 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ success: true, data: property });
     }
 
+    // ✅ All properties (paginated)
     const total = await Property.countDocuments();
+
     const properties = await Property.find()
-      .populate("selectedTaxes", "taxName amount amountType") // <-- populate for list as well
+      .populate("selectedTaxes", "taxName amount amountType")
+      .select("-__v")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .lean();
+      .lean(); // returns plain JSON not Mongoose docs
 
-    return NextResponse.json({ success: true, data: properties, total, page, limit });
+    return NextResponse.json({
+      success: true,
+      data: properties,
+      total,
+      page,
+      limit
+    });
+
   } catch (error: any) {
     console.error("❌ Error fetching properties:", error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
   }
 }
+
 
 
 // ✅ DELETE (By Id)

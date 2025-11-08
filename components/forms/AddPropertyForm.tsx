@@ -148,7 +148,10 @@ export default function AddPropertyForm() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
+        if (selectedTaxes.length === 0) {
+            alert("किमान एक कर निवडणे आवश्यक आहे.");
+            return;
+        }
         const form = e.currentTarget;
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
@@ -165,7 +168,7 @@ export default function AddPropertyForm() {
             girl: Number(data.girl || 0),
             vidhva: Number(data.vidhva || 0),
             isRental: data.isRental === "1",
-            landArea: Number(data.landArea || 0),
+            landArea: data.landArea,
             landAreaFeet: Number(data.landAreaFeet || 0),
             landAreaMeter: Number(data.landAreaMeter || 0),
             rentedMemberCount: Number(data.rentedMemberCount || 0),
@@ -312,8 +315,8 @@ export default function AddPropertyForm() {
                         </Col>
                         <Col md={3}>
                             <label className="form-label">मालमत्ता पत्ता</label>
-                            <select className="form-select">
-                                <option>-- निवडा --</option>
+                            <select name="propertyWard" className="form-select">
+                                <option value={""}>-- निवडा --</option>
                                 <option value={"वार्ड क्र. -1"}> वार्ड क्र. -1 </option>
                                 <option value={"वार्ड क्र. -2"}> वार्ड क्र. -2 </option>
                                 <option value={"वार्ड क्र. -3"}> वार्ड क्र. -3 </option>
@@ -419,19 +422,19 @@ export default function AddPropertyForm() {
                     </Col>
                     <Col md={2}>
                         <label className="form-label">पूर्व</label>
-                        <input type="text" name="sqrftEast" className="form-control" />
+                        <input type="text" name="eastSide" className="form-control" />
                     </Col>
                     <Col md={2}>
                         <label className="form-label">पश्चिम</label>
-                        <input type="text" name="sqrftWest" className="form-control" />
+                        <input type="text" name="westSide" className="form-control" />
                     </Col>
                     <Col md={2}>
                         <label className="form-label">उत्तर</label>
-                        <input type="text" name="sqrftNorth" className="form-control" />
+                        <input type="text" name="northSide" className="form-control" />
                     </Col>
                     <Col md={2}>
                         <label className="form-label">दक्षिण</label>
-                        <input type="text" name="sqrftSouth" className="form-control" />
+                        <input type="text" name="southSide" className="form-control" />
                     </Col>
                 </Row>
             </div>

@@ -29,7 +29,7 @@ const SignIn = () => {
 
   // Generate financial years from 2022-2023 to 2003-2004
   const years = [];
-  for (let y = 2024; y >= 2022; y--) {
+  for (let y = 2025; y >= 2022; y--) {
     years.push(`${y}-${y + 1}`);
   }
 
@@ -58,6 +58,7 @@ const SignIn = () => {
 
       // Optional: store admin info in sessionStorage
       sessionStorage.setItem("admin", JSON.stringify(data.admin));
+      sessionStorage.setItem("financialYear", financialYear);
 
       // On success, redirect to dashboard
       router.push("/dashboard");

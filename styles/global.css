@@ -1,3 +1,7 @@
+.tiro {
+    font-family: 'Tiro Devanagari Marathi', serif;
+}
+
 .compact-table td,
 .compact-table th {
     padding: 8px 2px !important;
@@ -82,41 +86,39 @@
     color: #000;
 }
 
+
 .tableAkarni {
     border-collapse: collapse;
     width: 100%;
+    /* overflow: visible !important; */
+    /* table-layout: auto !important; */
     font-size: 15px;
-    text-align: center;
 }
 
 .akarani-table th,
 .akarani-table td {
-    border-color: #800080 !important;
-    border: solid 1px !important;
-    color: #800080 !important;
-    padding: 4px;
-    vertical-align: middle;
+    border: solid 1.5px #800080 !important;
+    color: #000 !important;
+    padding: 7px;
+    vertical-align: top;
 }
 
-.akarani-table th {
-    font-weight: 600;
-}
-
+/* ✅ Number row cells */
 .number-row .num-cell {
-    border-color: #800080 !important;
-    border: solid 1px !important;
-    color: #800080 !important;
+    border: solid 1.5px #800080 !important;
+    color: #000 !important;
     text-align: center;
     font-weight: 600;
 }
 
+/* ✅ Top sections */
 .top-left,
 .top-center,
 .top-right {
     border: 1px solid #000;
     padding: 6px;
     font-weight: 600;
-    vertical-align: middle;
+    vertical-align: baseline;
 }
 
 .top-left {
@@ -133,17 +135,41 @@
     text-align: right;
 }
 
-.top-right p {
-    margin-top: -38px;
+.col-width {
+    white-space: nowrap;
+    table-layout: auto;
 }
 
+
+
+.empty-row td {
+    height: 7px;
+    /* adjust as you like */
+    padding: 0 !important;
+    line-height: 0;
+}
+
+.page-footer {
+    margin-top: 6rem;
+    color: #800080;
+    font-weight: 600;
+}
+
+.table-footer th {
+    color: #800080 !important;
+}
+
+/* print rules */
 @media print {
     .no-print {
         display: none;
     }
 
+    @page {
+        margin: 8mm;
+    }
+
     body {
-        background: #fff;
         -webkit-print-color-adjust: exact;
     }
 
@@ -151,8 +177,15 @@
         page-break-inside: auto;
     }
 
-    tr {
-        page-break-inside: avoid;
-        page-break-after: auto;
+    .print-block {
+        page-break-before: always;
+        page-break-after: always;
+    }
+
+    /* avoid cutting rows in middle */
+    tr,
+    td,
+    th {
+        page-break-inside: avoid !important;
     }
 }
